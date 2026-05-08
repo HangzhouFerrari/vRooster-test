@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="vRooster" />
+  <title>vRooster</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* ===== CSS VARIABLES & THEME ===== */
+    :root {
+      --accent: #6c63ff;
+      --accent-rgb: 108,99,255;
+      --accent-hover: #5a52e0;
+      --accent-soft: rgba(108,99,255,0.12);
+      --bg: #f4f5f8;
+      --bg-card: #ffffff;
+      --bg-header: #ffffff;
+      --bg-modal: #ffffff;
+      --bg-overlay: rgba(0,0,0,0.45);
+      --bg-input: #f0f1f5;
+      --text-primary: #0d0d1a;
+      --text-secondary: #6b6b80;
+      --text-tertiary: #9898ab;
+      --border: rgba(0,0,0,0.07);
+      --border-strong: rgba(0,0,0,0.12);
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.06);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.08);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --font: 'Outfit', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+      --header-height: 60px;
+      --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+      --transition-bounce: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0e0e14;
+      --bg-card: #1a1a26;
+      --bg-header: #13131e;
+      --bg-modal: #1a1a26;
+      --bg-overlay: rgba(0,0,0,0.65);
+      --bg-input: #222232;
+      --text-primary: #f0f0ff;
+      --text-secondary: #9090b0;
+      --text-tertiary: #60607a;
+      --border: rgba(255,255,255,0.06);
+      --border-strong: rgba(255,255,255,0.10);
+      --shadow-sm: 0 1px 4px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.04);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.35), 0 1px 4px rgba(0,0,0,0.2);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100dvh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: background var(--transition), color var(--transition);
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    svg { display: block; flex-shrink: 0; }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      height: var(--header-height);
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: background var(--transition);
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+    .header-logo-mark {
+      width: 32px; height: 32px;
+      border-radius: 9px;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: -0.5px;
+      box-shadow: 0 2px 8px rgba(var(--accent-rgb),0.4);
+    }
+    .header-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--text-primary);
+    }
+    .header-title span {
+      color: var(--accent);
+    }
+    .header-subtitle {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    /* Expired banner */
+    .expired-banner {
+      background: linear-gradient(90deg, #ff6b35, #f7c59f);
+      color: #fff;
+      text-align: center;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      display: none;
+    }
+    .expired-banner.show { display: block; }
+
+    /* View toggle (desktop) */
+    .view-toggle {
+      display: flex;
+      background: var(--bg-input);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      gap: 2px;
+    }
+    .view-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .view-btn.active {
+      background: var(--bg-card);
+      color: var(--accent);
+      box-shadow: var(--shadow-sm);
+    }
+    @media (max-width: 768px) {
+      .view-toggle { display: none; }
+    }
+
+    /* Settings button */
+    .settings-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--bg-input);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .settings-btn:hover { background: var(--accent-soft); color: var(--accent); }
+    .settings-btn svg { width: 18px; height: 18px; }
+
+    /* ===== SETTINGS DROPDOWN ===== */
+    .settings-wrapper {
+      position: relative;
+    }
+    .settings-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: 280px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 12px;
+      z-index: 500;
+      display: none;
+      animation: dropIn 0.2s cubic-bezier(0.4,0,0.2,1);
+    }
+    .settings-dropdown.open { display: block; }
+    @keyframes dropIn {
+      from { opacity: 0; transform: translateY(-8px) scale(0.97); }
+      to { opacity: 1; transform: none; }
+    }
+    .settings-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      padding: 4px 8px 6px;
+    }
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 8px;
+      border-radius: var(--radius-sm);
+      gap: 12px;
+    }
+    .settings-row:hover { background: var(--bg-input); }
+    .settings-row-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      flex: 1;
+    }
+    .settings-row.disabled .settings-row-label { color: var(--text-tertiary); }
+
+    /* Toggle switch */
+    .toggle-switch {
+      position: relative;
+      width: 40px; height: 22px;
+      flex-shrink: 0;
+    }
+    .toggle-switch input { display: none; }
+    .toggle-track {
+      position: absolute; inset: 0;
+      background: var(--border-strong);
+      border-radius: 11px;
+      transition: background var(--transition);
+      cursor: pointer;
+    }
+    .toggle-thumb {
+      position: absolute;
+      top: 2px; left: 2px;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform var(--transition-bounce), background var(--transition);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      pointer-events: none;
+    }
+    .toggle-switch input:checked ~ .toggle-track { background: var(--accent); }
+    .toggle-switch input:checked ~ .toggle-track .toggle-thumb { transform: translateX(18px); }
+    .toggle-switch.disabled { opacity: 0.4; pointer-events: none; }
+
+    /* Accent color picker */
+    .accent-grid {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      padding: 4px 8px 8px;
+    }
+    .accent-swatch {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform var(--transition-bounce);
+      border: 2px solid transparent;
+      position: relative;
+    }
+    .accent-swatch:hover { transform: scale(1.2); }
+    .accent-swatch.active::after {
+      content: '';
+      position: absolute; inset: -3px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+    }
+
+    /* Rooster selector */
+    .rooster-selector-wrapper {
+      padding: 4px 8px 8px;
+    }
+    .rooster-select-btn {
+      width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 10px;
+      background: var(--bg-input);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: background var(--transition);
+      border: 1px solid var(--border);
+    }
+    .rooster-select-btn:hover { background: var(--border); }
+    .rooster-dropdown-list {
+      margin-top: 4px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: none;
+      box-shadow: var(--shadow-md);
+    }
+    .rooster-dropdown-list.open { display: block; }
+    .rooster-dropdown-item {
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--text-primary);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 8px;
+      transition: background var(--transition);
+    }
+    .rooster-dropdown-item:hover { background: var(--accent-soft); }
+    .rooster-dropdown-item.active { color: var(--accent); font-weight: 600; }
+    .rooster-dropdown-item small {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      flex-shrink: 0;
+    }
+    .settings-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 6px 0;
+    }
+
+    /* ===== MAIN LAYOUT ===== */
+    .main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+    @media (max-width: 768px) {
+      .main { padding: 0 0 80px; }
+    }
+
+    /* ===== GRID VIEW ===== */
+    .grid-view {
+      display: none;
+    }
+    .grid-view.active { display: block; }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+    }
+    @media (min-width: 900px) {
+      .grid-container { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+    }
+
+    .grid-day-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .grid-day-header {
+      text-align: center;
+      padding: 10px 8px;
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .grid-day-name {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .grid-day-date {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+    .grid-day-date.today {
+      color: var(--accent);
+    }
+
+    .grid-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 12px;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+    .grid-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--accent);
+      opacity: 0.6;
+      border-radius: 0 0 0 0;
+    }
+    .grid-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--accent);
+    }
+    .grid-card:active { transform: scale(0.98); }
+    .grid-card-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .grid-card-vak {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .grid-card-tijd {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    /* ===== MAGISTER / LIST VIEW ===== */
+    .list-view {
+      display: none;
+    }
+    .list-view.active { display: flex; flex-direction: column; }
+
+    /* Day navigator (desktop for list view) */
+    .day-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .day-nav-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .day-nav-btn:hover:not(:disabled) { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+    .day-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .day-nav-tabs {
+      display: flex;
+      gap: 6px;
+      flex: 1;
+      overflow: hidden;
+    }
+    .day-nav-tab {
+      flex: 1;
+      min-width: 0;
+      text-align: center;
+      padding: 8px 6px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+    .day-nav-tab-name {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-tertiary);
+    }
+    .day-nav-tab-date {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-secondary);
+    }
+    .day-nav-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    .day-nav-tab.active .day-nav-tab-name,
+    .day-nav-tab.active .day-nav-tab-date { color: #fff; }
+    .day-nav-tab.today .day-nav-tab-date { color: var(--accent); }
+    .day-nav-tab.active.today .day-nav-tab-date { color: #fff; }
+
+    /* List day panel */
+    .list-day-panels {
+      position: relative;
+      overflow: hidden;
+    }
+    .list-day-panel {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      animation: slideIn 0.28s cubic-bezier(0.4,0,0.2,1);
+    }
+    .list-day-panel.active { display: flex; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(24px); }
+      to { opacity: 1; transform: none; }
+    }
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-24px); }
+      to { opacity: 1; transform: none; }
+    }
+    .list-day-panel.slide-left { animation: slideInLeft 0.28s cubic-bezier(0.4,0,0.2,1); }
+
+    /* Mobile day view */
+    @media (max-width: 768px) {
+      .day-nav { margin: 0; display: none; }
+      .list-view.active {
+        /* mobile uses swipe panels inside the mobile-view */
+      }
+    }
+
+    /* List row card */
+    .list-row {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .list-row::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+    .list-row:hover { transform: translateX(3px); box-shadow: var(--shadow-md); border-color: rgba(var(--accent-rgb),0.3); }
+    .list-row:active { transform: scale(0.99); }
+    .list-row-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+      width: 44px;
+      text-align: center;
+    }
+    .list-row-content { flex: 1; min-width: 0; }
+    .list-row-vak {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .list-row-tijd {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      margin-top: 2px;
+    }
+    .list-row-arrow {
+      color: var(--text-tertiary);
+      flex-shrink: 0;
+    }
+
+    /* ===== MOBILE VIEW ===== */
+    .mobile-view {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .mobile-view { display: flex; flex-direction: column; flex: 1; }
+      .grid-view, .list-view { display: none !important; }
+    }
+
+    /* Mobile day header strip */
+    .mobile-header {
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px 12px;
+      position: sticky;
+      top: var(--header-height);
+      z-index: 100;
+    }
+    .mobile-day-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+    .mobile-day-tabs {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .mobile-day-tabs::-webkit-scrollbar { display: none; }
+    .mobile-day-tab {
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+      background: transparent;
+      min-width: 52px;
+    }
+    .mobile-day-tab-name {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+    }
+    .mobile-day-tab-date {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .mobile-day-tab.active .mobile-day-tab-date {
+      background: var(--accent);
+      color: #fff;
+    }
+    .mobile-day-tab.active .mobile-day-tab-name { color: var(--accent); }
+
+    /* Mobile swipeable panels */
+    .mobile-panels-wrapper {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+    .mobile-panels-track {
+      display: flex;
+      height: 100%;
+      will-change: transform;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .mobile-panel {
+      flex-shrink: 0;
+      width: 100%;
+      overflow-y: auto;
+      padding: 12px 16px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .mobile-day-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-tertiary);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* Mobile list row */
+    .mobile-row {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 14px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all var(--transition);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+    .mobile-row::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+      opacity: 0.5;
+    }
+    .mobile-row:active { transform: scale(0.98); opacity: 0.85; }
+    .mobile-row-icon { font-size: 26px; flex-shrink: 0; }
+    .mobile-row-content { flex: 1; min-width: 0; }
+    .mobile-row-vak {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mobile-row-tijd {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      margin-top: 2px;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .modal-overlay.open {
+      pointer-events: all;
+      opacity: 1;
+    }
+    .modal-backdrop {
+      position: absolute; inset: 0;
+      background: var(--bg-overlay);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .modal-panel {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 600px;
+      max-height: 85dvh;
+      background: var(--bg-modal);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      padding: 8px 24px 32px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.2);
+    }
+    .modal-overlay.open .modal-panel {
+      transform: translateY(0);
+    }
+    @media (min-width: 769px) {
+      .modal-overlay {
+        align-items: center;
+      }
+      .modal-panel {
+        border-radius: var(--radius-xl);
+        max-height: 80dvh;
+        transform: scale(0.94) translateY(12px);
+        transition: transform 0.3s cubic-bezier(0.34,1.3,0.64,1), opacity 0.25s ease;
+        opacity: 0;
+      }
+      .modal-overlay.open .modal-panel {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Modal handle (mobile) */
+    .modal-handle {
+      width: 36px; height: 4px;
+      background: var(--border-strong);
+      border-radius: 2px;
+      margin: 0 auto 16px;
+    }
+    @media (min-width: 769px) { .modal-handle { display: none; } }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 16px; right: 20px;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: var(--bg-input);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+      z-index: 2;
+    }
+    .modal-close-btn:hover { background: rgba(255,60,60,0.12); color: #ff3c3c; }
+
+    .modal-header {
+      margin-bottom: 20px;
+      padding-right: 40px;
+    }
+    .modal-vak-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .modal-meta {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* Shortcut buttons */
+    .modal-shortcuts {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .shortcut-btn {
+      flex: 1;
+      min-width: 80px;
+      max-width: 120px;
+      padding: 12px 8px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg-input);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+    .shortcut-btn:hover { background: var(--accent-soft); color: var(--accent); border-color: rgba(var(--accent-rgb),0.3); transform: translateY(-1px); }
+    .shortcut-btn.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      box-shadow: 0 4px 14px rgba(var(--accent-rgb),0.35);
+    }
+    .shortcut-btn.primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .shortcut-btn svg { width: 24px; height: 24px; }
+
+    /* Modal stof */
+    .modal-stof { display: flex; flex-direction: column; gap: 16px; }
+    .stof-section {}
+    .stof-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .stof-label::before {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.7;
+    }
+    .stof-text {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--text-secondary);
+      padding-left: 14px;
+    }
+    .stof-text i { font-style: italic; color: var(--text-primary); }
+    .stof-empty { color: var(--text-tertiary); font-style: italic; }
+
+    /* ===== LOADING STATE ===== */
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      gap: 16px;
+      color: var(--text-secondary);
+    }
+    .loading-spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-col {
+      text-align: center;
+      padding: 24px 12px;
+      color: var(--text-tertiary);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+    /* ===== MISC ===== */
+    .dot-accent {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      margin-left: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="header-logo">
+      <div class="header-logo-mark">v</div>
+      <div>
+        <div class="header-title">vRooster<span class="dot-accent" style="display:inline-block;margin-left:2px;vertical-align:middle;"></span></div>
+        <div class="header-subtitle" id="roosterSubtitle">Laden...</div>
+      </div>
+    </div>
+
+    <!-- View toggle (desktop only) -->
+    <div class="view-toggle" id="viewToggle">
+      <button class="view-btn active" id="btnGrid" onclick="setView('grid')">
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
+        Grid
+      </button>
+      <button class="view-btn" id="btnList" onclick="setView('list')">
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><rect x="4" y="2" width="10" height="2" rx="1"/><rect x="1" y="2" width="2" height="2" rx="0.5"/><rect x="4" y="7" width="10" height="2" rx="1"/><rect x="1" y="7" width="2" height="2" rx="0.5"/><rect x="4" y="12" width="10" height="2" rx="1"/><rect x="1" y="12" width="2" height="2" rx="0.5"/></svg>
+        Lijst
+      </button>
+    </div>
+
+    <!-- Settings -->
+    <div class="settings-wrapper">
+      <button class="settings-btn" id="settingsBtn" onclick="toggleSettings()" aria-label="Instellingen">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" /></svg>
+      </button>
+
+      <div class="settings-dropdown" id="settingsDropdown">
+        <!-- Rooster -->
+        <div class="settings-section-label">Rooster</div>
+        <div class="rooster-selector-wrapper">
+          <button class="rooster-select-btn" id="roosterSelectBtn" onclick="toggleRoosterDropdown()">
+            <span id="roosterSelectLabel">Laden...</span>
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M4 6l4 4 4-4"/></svg>
+          </button>
+          <div class="rooster-dropdown-list" id="roosterDropdownList"></div>
+        </div>
+        <div class="settings-divider"></div>
+
+        <!-- Sync -->
+        <div class="settings-section-label">Synchronisatie</div>
+        <div class="settings-row" id="rowSync">
+          <span class="settings-row-label">Synchroniseer met Velios+</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggleSync" checked onchange="handleSyncChange()">
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </label>
+        </div>
+        <div class="settings-divider"></div>
+
+        <!-- Appearance -->
+        <div class="settings-section-label">Verschijning</div>
+        <div class="settings-row" id="rowDark">
+          <span class="settings-row-label">Donkere modus</span>
+          <label class="toggle-switch" id="darkToggleSwitch">
+            <input type="checkbox" id="toggleDark" onchange="handleDarkChange()">
+            <div class="toggle-track"><div class="toggle-thumb"></div></div>
+          </label>
+        </div>
+        <div class="settings-section-label" style="padding-top:4px;">Accentkleur</div>
+        <div class="accent-grid" id="accentGrid"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Expired banner -->
+  <div class="expired-banner" id="expiredBanner">
+    ⚠️ Dit rooster is verlopen. Je bekijkt een verlopen versie.
+  </div>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main" id="mainContent">
+    <div class="loading-state" id="loadingState">
+      <div class="loading-spinner"></div>
+      <div>Rooster laden...</div>
+    </div>
+
+    <!-- GRID VIEW (desktop) -->
+    <div class="grid-view active" id="gridView">
+      <div class="grid-container" id="gridContainer"></div>
+    </div>
+
+    <!-- LIST VIEW (desktop) -->
+    <div class="list-view" id="listView">
+      <div class="day-nav" id="dayNav">
+        <button class="day-nav-btn" id="dayNavPrev" onclick="navigateDay(-1)" disabled>
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M10 4l-4 4 4 4"/></svg>
+        </button>
+        <div class="day-nav-tabs" id="dayNavTabs"></div>
+        <button class="day-nav-btn" id="dayNavNext" onclick="navigateDay(1)">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M6 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+      <div class="list-day-panels" id="listDayPanels"></div>
+    </div>
+  </main>
+
+  <!-- ===== MOBILE VIEW ===== -->
+  <div class="mobile-view" id="mobileView">
+    <div class="mobile-header">
+      <div class="mobile-day-title" id="mobileDayTitle">–</div>
+      <div class="mobile-day-tabs" id="mobileDayTabs"></div>
+    </div>
+    <div class="mobile-panels-wrapper" id="mobilePanelsWrapper">
+      <div class="mobile-panels-track" id="mobilePanelsTrack"></div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-backdrop" onclick="closeModal()"></div>
+    <div class="modal-panel" id="modalPanel">
+      <div class="modal-handle"></div>
+      <button class="modal-close-btn" onclick="closeModal()">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="modal-header">
+        <div class="modal-vak-name" id="modalVakName">–</div>
+        <div class="modal-meta" id="modalMeta"></div>
+      </div>
+      <div class="modal-shortcuts" id="modalShortcuts"></div>
+      <div class="modal-stof" id="modalStof"></div>
+    </div>
+  </div>
+
+<script>
+// ===== CONSTANTS =====
+const ACCENT_COLORS = [
+  { name: 'Paars', value: '#6c63ff' },
+  { name: 'Blauw', value: '#3b82f6' },
+  { name: 'Cyaan', value: '#06b6d4' },
+  { name: 'Groen', value: '#22c55e' },
+  { name: 'Oranje', value: '#f97316' },
+  { name: 'Rood', value: '#ef4444' },
+  { name: 'Roze', value: '#ec4899' },
+  { name: 'Indigo', value: '#818cf8' },
+];
+const NL_DAYS = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
+const NL_DAYS_FULL = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
+const NL_MONTHS = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+const ROOSTER_DIR = './rooster/';
+
+// ===== STATE =====
+let allRoosters = [];
+let currentRooster = null;
+let days = [];
+let currentDayIdx = 0;
+let currentView = 'grid';
+let settings = {
+  syncVelios: true,
+  dark: false,
+  accent: '#6c63ff'
+};
+
+// ===== SETTINGS =====
+function loadSettings() {
+  const saved = localStorage.getItem('vrooster_settings');
+  if (saved) {
+    try { settings = { ...settings, ...JSON.parse(saved) }; } catch(e) {}
+  }
+  // If sync, read velios+ settings
+  if (settings.syncVelios) {
+    const veliosSettings = readVeliosSettings();
+    if (veliosSettings) {
+      settings.dark = veliosSettings.dark;
+      settings.accent = veliosSettings.accent;
+    }
+  }
+  applySettings();
+}
+function saveSettings() {
+  localStorage.setItem('vrooster_settings', JSON.stringify(settings));
+}
+function readVeliosSettings() {
+  try {
+    const raw = localStorage.getItem('veliosplus_settings');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return null;
+}
+function applySettings() {
+  document.documentElement.setAttribute('data-theme', settings.dark ? 'dark' : 'light');
+  document.documentElement.style.setProperty('--accent', settings.accent);
+  // Parse RGB
+  const rgb = hexToRgb(settings.accent);
+  if (rgb) document.documentElement.style.setProperty('--accent-rgb', `${rgb.r},${rgb.g},${rgb.b}`);
+  document.documentElement.style.setProperty('--accent-hover', darken(settings.accent, 15));
+  document.documentElement.style.setProperty('--accent-soft', `rgba(${rgb?.r||108},${rgb?.g||99},${rgb?.b||255},0.12)`);
+
+  // Sync toggle
+  const syncCheck = document.getElementById('toggleSync');
+  if (syncCheck) syncCheck.checked = settings.syncVelios;
+
+  // Dark toggle
+  const darkCheck = document.getElementById('toggleDark');
+  if (darkCheck) darkCheck.checked = settings.dark;
+
+  // Disable dark/accent if synced
+  const darkRow = document.getElementById('rowDark');
+  const darkSwitch = document.getElementById('darkToggleSwitch');
+  const accentGrid = document.getElementById('accentGrid');
+  if (settings.syncVelios) {
+    darkRow?.classList.add('disabled');
+    darkSwitch?.classList.add('disabled');
+    if (accentGrid) accentGrid.style.opacity = '0.4';
+    if (accentGrid) accentGrid.style.pointerEvents = 'none';
+  } else {
+    darkRow?.classList.remove('disabled');
+    darkSwitch?.classList.remove('disabled');
+    if (accentGrid) accentGrid.style.opacity = '';
+    if (accentGrid) accentGrid.style.pointerEvents = '';
+  }
+
+  // Accent swatches
+  renderAccentSwatches();
+}
+function handleSyncChange() {
+  settings.syncVelios = document.getElementById('toggleSync').checked;
+  if (settings.syncVelios) {
+    const v = readVeliosSettings();
+    if (v) { settings.dark = v.dark; settings.accent = v.accent; }
+  }
+  saveSettings();
+  applySettings();
+}
+function handleDarkChange() {
+  if (settings.syncVelios) return;
+  settings.dark = document.getElementById('toggleDark').checked;
+  saveSettings();
+  applySettings();
+}
+function setAccent(color) {
+  if (settings.syncVelios) return;
+  settings.accent = color;
+  saveSettings();
+  applySettings();
+}
+function renderAccentSwatches() {
+  const grid = document.getElementById('accentGrid');
+  if (!grid) return;
+  grid.innerHTML = ACCENT_COLORS.map(c => `
+    <div class="accent-swatch ${c.value === settings.accent ? 'active' : ''}" 
+         style="background:${c.value}" 
+         title="${c.name}" 
+         onclick="setAccent('${c.value}')"></div>
+  `).join('');
+}
+
+// ===== SETTINGS DROPDOWN =====
+function toggleSettings() {
+  const dd = document.getElementById('settingsDropdown');
+  dd.classList.toggle('open');
+  // Close when clicking outside
+  if (dd.classList.contains('open')) {
+    setTimeout(() => document.addEventListener('click', closeSettingsOutside, { once: true }), 10);
+  }
+}
+function closeSettingsOutside(e) {
+  const dd = document.getElementById('settingsDropdown');
+  const btn = document.getElementById('settingsBtn');
+  if (!dd.contains(e.target) && !btn.contains(e.target)) {
+    dd.classList.remove('open');
+  } else if (!dd.classList.contains('open')) {
+    // already closed
+  } else {
+    document.addEventListener('click', closeSettingsOutside, { once: true });
+  }
+}
+
+// ===== ROOSTER LOADING =====
+async function discoverRoosters() {
+  // We try to load a manifest or just the known file
+  // Since we can't list a directory in static hosting, we try common names
+  // In production, you'd have a manifest.json or similar
+  const toTry = [
+    'toetsweek2.vrooster',
+    'toetsweek1.vrooster',
+    'periode3.vrooster',
+    'periode2.vrooster',
+    'periode1.vrooster',
+  ];
+  
+  const loaded = [];
+  for (const file of toTry) {
+    try {
+      const res = await fetch(ROOSTER_DIR + file);
+      if (res.ok) {
+        const data = await res.json();
+        loaded.push({ file, data });
+      }
+    } catch(e) { /* skip */ }
+  }
+  return loaded;
+}
+
+async function initApp() {
+  loadSettings();
+  
+  const roosters = await discoverRoosters();
+  allRoosters = roosters;
+
+  if (!roosters.length) {
+    document.getElementById('loadingState').innerHTML = '<div style="color:var(--text-tertiary)">Geen rooster gevonden in ./rooster/</div>';
+    return;
+  }
+
+  // Sort by startdatum descending, pick most recent
+  roosters.sort((a, b) => new Date(b.data.startdatum) - new Date(a.data.startdatum));
+  
+  buildRoosterSelectorUI(roosters);
+  loadRooster(roosters[0]);
+}
+
+function buildRoosterSelectorUI(roosters) {
+  const list = document.getElementById('roosterDropdownList');
+  list.innerHTML = roosters.map((r, i) => {
+    const start = formatDate(r.data.startdatum);
+    const end = formatDate(r.data.einddatum);
+    return `<div class="rooster-dropdown-item ${i===0?'active':''}" onclick="selectRooster(${i})" id="roosterItem${i}">
+      <span>${r.data.naam} <small style="color:var(--text-tertiary);font-size:11px">${r.data.klas}</small></span>
+      <small>${start} – ${end}</small>
+    </div>`;
+  }).join('');
+}
+
+function selectRooster(idx) {
+  document.querySelectorAll('.rooster-dropdown-item').forEach((el, i) => el.classList.toggle('active', i === idx));
+  toggleRoosterDropdown();
+  loadRooster(allRoosters[idx]);
+}
+
+function toggleRoosterDropdown() {
+  document.getElementById('roosterDropdownList').classList.toggle('open');
+}
+
+function loadRooster(roosterEntry) {
+  currentRooster = roosterEntry.data;
+  document.getElementById('roosterSelectLabel').textContent = currentRooster.naam;
+  document.getElementById('roosterSubtitle').textContent = `${currentRooster.naam} · ${currentRooster.klas}`;
+  document.getElementById('loadingState').style.display = 'none';
+
+  // Check expired
+  const expired = new Date() > new Date(currentRooster.einddatum + 'T23:59:59');
+  document.getElementById('expiredBanner').classList.toggle('show', expired);
+
+  // Build days
+  buildDays();
+  // Render
+  renderAll();
+}
+
+function buildDays() {
+  const dateMap = {};
+  for (const act of currentRooster.activiteiten) {
+    if (!dateMap[act.datum]) dateMap[act.datum] = [];
+    dateMap[act.datum].push(act);
+  }
+  // Sort activities per day by time
+  for (const d in dateMap) {
+    dateMap[d].sort((a, b) => a.tijd.localeCompare(b.tijd));
+  }
+  const sortedDates = Object.keys(dateMap).sort();
+  days = sortedDates.map(d => ({ date: d, activities: dateMap[d] }));
+
+  // Find today or first day
+  const todayStr = getTodayStr();
+  currentDayIdx = days.findIndex(d => d.date === todayStr);
+  if (currentDayIdx < 0) currentDayIdx = 0;
+}
+
+// ===== RENDER =====
+function renderAll() {
+  renderGrid();
+  renderList();
+  renderMobile();
+}
+
+function renderGrid() {
+  const container = document.getElementById('gridContainer');
+  container.innerHTML = days.map(day => {
+    const dateObj = new Date(day.date + 'T12:00:00');
+    const isToday = day.date === getTodayStr();
+    const dayName = NL_DAYS[dateObj.getDay()];
+    const dayNum = dateObj.getDate();
+    return `<div class="grid-day-col">
+      <div class="grid-day-header">
+        <div class="grid-day-name">${dayName}</div>
+        <div class="grid-day-date ${isToday ? 'today' : ''}">${dayNum}</div>
+      </div>
+      ${day.activities.length ? day.activities.map(act => `
+        <div class="grid-card" onclick="openModal('${act.id}')">
+          <div class="grid-card-icon">${act.icoon || '📚'}</div>
+          <div class="grid-card-vak">${act.vak}</div>
+          <div class="grid-card-tijd">${act.tijd}</div>
+        </div>
+      `).join('') : `<div class="empty-col">—</div>`}
+    </div>`;
+  }).join('');
+}
+
+function renderList() {
+  // Build tabs
+  const tabsEl = document.getElementById('dayNavTabs');
+  tabsEl.innerHTML = days.map((day, i) => {
+    const dateObj = new Date(day.date + 'T12:00:00');
+    const isToday = day.date === getTodayStr();
+    return `<div class="day-nav-tab ${i === currentDayIdx ? 'active' : ''} ${isToday ? 'today' : ''}" 
+                 onclick="setDay(${i})" id="dayTab${i}">
+      <div class="day-nav-tab-name">${NL_DAYS[dateObj.getDay()]}</div>
+      <div class="day-nav-tab-date">${dateObj.getDate()}</div>
+    </div>`;
+  }).join('');
+
+  // Build panels
+  const panelsEl = document.getElementById('listDayPanels');
+  panelsEl.innerHTML = days.map((day, i) => {
+    return `<div class="list-day-panel ${i === currentDayIdx ? 'active' : ''}" id="listPanel${i}">
+      ${day.activities.map(act => `
+        <div class="list-row" onclick="openModal('${act.id}')">
+          <div class="list-row-icon">${act.icoon || '📚'}</div>
+          <div class="list-row-content">
+            <div class="list-row-vak">${act.vak}</div>
+            <div class="list-row-tijd">${formatDateLong(day.date)} · ${act.tijd}</div>
+          </div>
+          <div class="list-row-arrow">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M6 4l4 4-4 4"/></svg>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+  }).join('');
+
+  updateDayNavButtons();
+}
+
+function renderMobile() {
+  const today = getTodayStr();
+  
+  // Tabs
+  const tabsEl = document.getElementById('mobileDayTabs');
+  tabsEl.innerHTML = days.map((day, i) => {
+    const dateObj = new Date(day.date + 'T12:00:00');
+    const isToday = day.date === today;
+    return `<div class="mobile-day-tab ${i === currentDayIdx ? 'active' : ''}" onclick="setDay(${i})" id="mobileTab${i}">
+      <div class="mobile-day-tab-name">${NL_DAYS[dateObj.getDay()]}</div>
+      <div class="mobile-day-tab-date">${dateObj.getDate()}</div>
+    </div>`;
+  }).join('');
+
+  // Panels track
+  const track = document.getElementById('mobilePanelsTrack');
+  track.innerHTML = days.map((day, i) => {
+    return `<div class="mobile-panel" id="mobilePanel${i}">
+      ${day.activities.length ? day.activities.map(act => `
+        <div class="mobile-row" onclick="openModal('${act.id}')">
+          <div class="mobile-row-icon">${act.icoon || '📚'}</div>
+          <div class="mobile-row-content">
+            <div class="mobile-row-vak">${act.vak}</div>
+            <div class="mobile-row-tijd">${act.tijd}</div>
+          </div>
+        </div>
+      `).join('') : `<div class="mobile-day-empty">Geen activiteiten</div>`}
+    </div>`;
+  }).join('');
+
+  track.style.width = (days.length * 100) + '%';
+  track.querySelectorAll('.mobile-panel').forEach(p => p.style.width = (100/days.length) + '%');
+
+  updateMobileDay(false);
+  initSwipe();
+}
+
+function updateMobileDay(animate = true) {
+  if (!days.length) return;
+  const day = days[currentDayIdx];
+  const dateObj = new Date(day.date + 'T12:00:00');
+  document.getElementById('mobileDayTitle').textContent = `${NL_DAYS_FULL[dateObj.getDay()]} ${dateObj.getDate()} ${NL_MONTHS[dateObj.getMonth()]}`;
+
+  // Update tabs
+  document.querySelectorAll('.mobile-day-tab').forEach((el, i) => el.classList.toggle('active', i === currentDayIdx));
+
+  // Slide track
+  const track = document.getElementById('mobilePanelsTrack');
+  if (animate) {
+    track.style.transition = 'transform 0.3s cubic-bezier(0.4,0,0.2,1)';
+  } else {
+    track.style.transition = 'none';
+  }
+  track.style.transform = `translateX(-${(currentDayIdx / days.length) * 100}%)`;
+
+  // Scroll active tab into view
+  const activeTab = document.getElementById(`mobileTab${currentDayIdx}`);
+  activeTab?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+}
+
+// ===== SWIPE =====
+function initSwipe() {
+  const wrapper = document.getElementById('mobilePanelsWrapper');
+  let startX = 0, startY = 0, isDragging = false;
+  
+  wrapper.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    isDragging = true;
+  }, { passive: true });
+
+  wrapper.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+  }, { passive: true });
+
+  wrapper.addEventListener('touchend', e => {
+    if (!isDragging) return;
+    isDragging = false;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      if (dx < 0 && currentDayIdx < days.length - 1) setDay(currentDayIdx + 1);
+      else if (dx > 0 && currentDayIdx > 0) setDay(currentDayIdx - 1);
+    }
+  }, { passive: true });
+}
+
+// ===== DAY NAVIGATION =====
+function setDay(idx, direction) {
+  if (idx < 0 || idx >= days.length) return;
+  
+  // List view: animate panel
+  const isMobile = window.innerWidth <= 768;
+  if (!isMobile) {
+    const oldPanel = document.getElementById(`listPanel${currentDayIdx}`);
+    const newPanel = document.getElementById(`listPanel${idx}`);
+    if (oldPanel) oldPanel.classList.remove('active');
+    if (newPanel) {
+      const goLeft = idx < currentDayIdx;
+      newPanel.classList.remove('slide-left');
+      newPanel.classList.remove('active');
+      void newPanel.offsetWidth;
+      if (goLeft) newPanel.classList.add('slide-left');
+      newPanel.classList.add('active');
+    }
+    // Update tabs
+    document.querySelectorAll('.day-nav-tab').forEach((el, i) => el.classList.toggle('active', i === idx));
+  }
+
+  currentDayIdx = idx;
+  updateDayNavButtons();
+  updateMobileDay(true);
+}
+
+function navigateDay(delta) {
+  setDay(currentDayIdx + delta);
+}
+
+function updateDayNavButtons() {
+  const prev = document.getElementById('dayNavPrev');
+  const next = document.getElementById('dayNavNext');
+  if (prev) prev.disabled = currentDayIdx === 0;
+  if (next) next.disabled = currentDayIdx === days.length - 1;
+}
+
+// ===== VIEW TOGGLE =====
+function setView(view) {
+  currentView = view;
+  document.getElementById('gridView').classList.toggle('active', view === 'grid');
+  document.getElementById('listView').classList.toggle('active', view === 'list');
+  document.getElementById('btnGrid').classList.toggle('active', view === 'grid');
+  document.getElementById('btnList').classList.toggle('active', view === 'list');
+}
+
+// ===== MODAL =====
+function openModal(actId) {
+  const act = currentRooster.activiteiten.find(a => a.id === actId);
+  if (!act) return;
+
+  // Header
+  document.getElementById('modalVakName').textContent = act.vak;
+  document.getElementById('modalMeta').innerHTML = `
+    <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 4h2v5H7V4zm0 6h2v2H7v-2z"/></svg>
+    ${formatDateLong(act.datum)} · ${act.tijd}
+  `;
+
+  // Shortcuts
+  const shortcuts = document.getElementById('modalShortcuts');
+  let btns = '';
+  if (act.snelkoppelingen?.begrippen) {
+    btns += `<a href="${act.snelkoppelingen.begrippen}" target="_blank" class="shortcut-btn primary">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+      Begrippen leren
+    </a>`;
+  }
+  // Magister always
+  btns += `<a href="https://murmellius.magister.net/magister/#/vandaag" target="_blank" class="shortcut-btn">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+    Magister
+  </a>`;
+  if (act.snelkoppelingen?.bestanden) {
+    btns += `<a href="${act.snelkoppelingen.bestanden}" target="_blank" class="shortcut-btn">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+      Bestanden
+    </a>`;
+  }
+  shortcuts.innerHTML = btns;
+
+  // Stof
+  const stof = act.stof;
+  const renderStofText = (text) => {
+    if (!text || text.trim() === '') return '<span class="stof-empty">–</span>';
+    return text.replace(/<i>(.*?)<\/i>/g, '<i>$1</i>').replace(/\n/g, '<br>');
+  };
+  document.getElementById('modalStof').innerHTML = `
+    <div class="stof-section">
+      <div class="stof-label">Theorie</div>
+      <div class="stof-text">${renderStofText(stof.theorie)}</div>
+    </div>
+    <div class="stof-section">
+      <div class="stof-label">Begrippen</div>
+      <div class="stof-text">${renderStofText(stof.begrippen)}</div>
+    </div>
+    <div class="stof-section">
+      <div class="stof-label">Overig</div>
+      <div class="stof-text">${renderStofText(stof.overig)}</div>
+    </div>
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Close on Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ===== UTILS =====
+function getTodayStr() {
+  const d = new Date();
+  return d.toISOString().split('T')[0];
+}
+function formatDate(str) {
+  if (!str) return '';
+  const d = new Date(str + 'T12:00:00');
+  return `${d.getDate()} ${NL_MONTHS[d.getMonth()]}`;
+}
+function formatDateLong(str) {
+  if (!str) return '';
+  const d = new Date(str + 'T12:00:00');
+  return `${NL_DAYS_FULL[d.getDay()]} ${d.getDate()} ${NL_MONTHS[d.getMonth()]}`;
+}
+function hexToRgb(hex) {
+  const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return r ? { r: parseInt(r[1],16), g: parseInt(r[2],16), b: parseInt(r[3],16) } : null;
+}
+function darken(hex, amount) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+  const d = (x) => Math.max(0, x - amount);
+  return `rgb(${d(rgb.r)},${d(rgb.g)},${d(rgb.b)})`;
+}
+
+// ===== INIT =====
+initApp();
+</script>
+</body>
+</html>
