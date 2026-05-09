@@ -25,43 +25,56 @@
   --font:'DM Sans',sans-serif;
   --ease:cubic-bezier(0,0,.47,1.15);
   --ease2:cubic-bezier(0.34,1.56,0.64,1);
-  --nav-h:72px;
+  /* safe-area nav heights */
+  --nav-h:calc(72px + env(safe-area-inset-top, 0px));
+  --nav-inner:72px;
+  --nav-h-mob:calc(60px + env(safe-area-inset-top, 0px));
+  --nav-inner-mob:60px;
 }
 
 html{min-height:100vh;font-family:var(--font);color:var(--text);font-size:16px;overflow-x:hidden;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;}
 body{min-height:100dvh;background:var(--bg-grad);background-attachment:fixed;display:flex;flex-direction:column;-webkit-touch-callout:none;}
 
-/* ── DARK MODE ── */
-body.dark-mode nav{background:rgba(20,18,28,0.92)!important;border-color:var(--glass-border)!important;}
-body.dark-mode .mobile-day-header{background:rgba(20,18,28,0.92)!important;border-color:var(--glass-border)!important;}
-body.dark-mode .settings-dropdown{background:rgb(28,27,38)!important;border-color:var(--glass-border)!important;color:var(--text);}
-body.dark-mode .activity-card,body.dark-mode .day-header,body.dark-mode .list-row,body.dark-mode .mobile-row,body.dark-mode .empty-col{background:var(--glass2)!important;border-color:var(--glass-border)!important;}
-body.dark-mode .modal-panel{background:rgb(28,27,38)!important;border-color:var(--glass-border)!important;}
-body.dark-mode .btn-glass{background:rgba(50,50,70,0.7)!important;color:var(--text)!important;border-color:var(--glass-border)!important;box-shadow:inset 1px 1px 0 rgba(88,93,120,0.5),0 2px 8px rgba(0,0,0,0.4)!important;}
+/* ════════ DARK MODE ════════ */
+body.dark-mode nav,.dark-mode .mobile-day-header{background:rgba(20,18,28,0.92)!important;border-color:var(--glass-border)!important;}
+body.dark-mode .settings-dropdown{background:rgb(28,27,38)!important;border-color:var(--glass-border)!important;}
+body.dark-mode .activity-card,.dark-mode .day-header,.dark-mode .list-row,.dark-mode .mobile-row,.dark-mode .empty-col{background:var(--glass2)!important;border-color:var(--glass-border)!important;}
+body.dark-mode .modal-panel{background:rgb(22,21,32)!important;border-color:var(--glass-border)!important;}
 body.dark-mode .btn-icon{background:rgba(50,50,70,0.7)!important;border-color:var(--glass-border)!important;box-shadow:inset 1px 1px 0 rgba(88,93,120,0.5),0 2px 8px rgba(0,0,0,0.4)!important;}
 body.dark-mode .day-nav-tab{background:rgba(50,50,70,0.7)!important;border-color:var(--glass-border)!important;}
 body.dark-mode .day-nav-tab.active{background:linear-gradient(180deg,var(--accent) 0%,var(--accent2) 100%)!important;}
 body.dark-mode .day-nav-btn{background:rgba(50,50,70,0.7)!important;border-color:var(--glass-border)!important;}
 body.dark-mode .shortcut-btn{background:rgba(50,50,70,0.7)!important;border-color:var(--glass-border)!important;}
-body.dark-mode .stof-divider{background:rgba(255,255,255,0.08)!important;}
+body.dark-mode .stof-divider{background:rgba(255,255,255,0.07)!important;}
 body.dark-mode .rooster-select-btn{background:rgba(50,50,70,0.7)!important;border-color:var(--glass-border)!important;color:var(--text)!important;}
 body.dark-mode .rooster-dropdown-list{background:rgb(28,27,38)!important;border-color:var(--glass-border)!important;}
 body.dark-mode #toast{background:rgb(34,33,41)!important;border-color:var(--glass-border)!important;}
-body.dark-mode .expired-banner{background:rgba(240,123,32,0.12)!important;border-color:rgba(240,123,32,0.25)!important;}
 body.dark-mode .view-toggle{background:rgba(50,50,70,0.5)!important;border-color:var(--glass-border)!important;}
 body.dark-mode .view-btn.active{background:rgba(60,60,80,0.9)!important;}
+/* ghost panel during desktop modal open */
+body.dark-mode .grid-ghost{background:rgba(20,18,28,0.7)!important;}
 
-/* ── NAV ── */
+/* ════════ NAV ════════ */
 nav{
   position:sticky;top:0;z-index:300;
   background:rgba(240,238,249,0.88);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid rgba(200,195,230,0.5);
-  padding:0 28px;height:var(--nav-h);
-  display:flex;align-items:center;gap:12px;
+  /* safe-area padding at the top */
+  padding-top:env(safe-area-inset-top, 0px);
+  padding-left:28px;padding-right:28px;
+  height:var(--nav-h);
+  display:flex;align-items:flex-end;padding-bottom:0;
   transition:background .3s;
 }
-@media(max-width:750px){nav{padding:0 16px;height:60px;--nav-h:60px;}}
+.nav-inner{
+  width:100%;display:flex;align-items:center;gap:12px;
+  height:var(--nav-inner);
+}
+@media(max-width:750px){
+  nav{padding-left:16px;padding-right:16px;height:var(--nav-h-mob);}
+  .nav-inner{height:var(--nav-inner-mob);}
+}
 
 .nav-logo{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .nav-logo-mark{
@@ -69,8 +82,7 @@ nav{
   background:linear-gradient(180deg,var(--accent) 0%,var(--accent2) 100%);
   display:flex;align-items:center;justify-content:center;
   color:#fff;font-weight:800;font-size:17px;letter-spacing:-0.5px;
-  box-shadow:0 2px 12px var(--accent-light),inset 1px 1px 0 rgba(255,255,255,0.25);
-  flex-shrink:0;
+  box-shadow:0 2px 12px var(--accent-light),inset 1px 1px 0 rgba(255,255,255,0.25);flex-shrink:0;
 }
 .nav-logo-title{font-size:18px;font-weight:800;letter-spacing:-0.5px;color:var(--text);line-height:1;}
 .nav-logo-title span{color:var(--accent);}
@@ -91,7 +103,6 @@ nav{
 .view-btn.active{background:var(--glass);color:var(--accent);box-shadow:var(--glass-shadow);}
 .view-btn svg{width:13px;height:13px;}
 
-/* Buttons */
 .btn-icon{
   width:40px;height:40px;padding:0;display:inline-flex;align-items:center;justify-content:center;
   background:var(--glass);box-shadow:var(--glass-shadow);border:1px solid var(--glass-border);
@@ -100,25 +111,16 @@ nav{
 .btn-icon:hover{background:rgba(255,255,255,0.95);transform:scale(1.08);box-shadow:var(--glass-shadow-lg);}
 .btn-icon:active{transform:scale(0.96);}
 .btn-icon svg{width:18px;height:18px;}
-.btn-sm{
-  display:inline-flex;align-items:center;gap:6px;border:1px solid var(--glass-border);
-  border-radius:var(--r4);cursor:pointer;font-family:var(--font);font-size:13px;font-weight:700;
-  padding:6px 14px;transition:all .2s var(--ease);background:var(--glass);
-  color:var(--text);box-shadow:var(--glass-shadow);
-}
-.btn-sm:hover{background:rgba(255,255,255,0.95);transform:scale(1.04);}
 
-/* ── SETTINGS DROPDOWN ── */
+/* ════════ SETTINGS DROPDOWN ════════ */
 .settings-dropdown-wrap{position:relative;margin-left:10px;}
 .settings-dropdown{
   position:absolute;right:-8px;top:50px;
-  background:rgba(255,255,255,0.97);
-  border:1px solid rgba(200,195,230,0.6);
+  background:rgba(255,255,255,0.97);border:1px solid rgba(200,195,230,0.6);
   border-radius:var(--r);padding:16px;min-width:295px;
   box-shadow:0 8px 32px rgba(80,60,160,0.2);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  z-index:500;transform-origin:top right;
-  display:none;
+  z-index:500;transform-origin:top right;display:none;
 }
 .settings-dropdown.open{display:block;animation:dropIn .25s var(--ease2) both;}
 .settings-dropdown.closing{display:block!important;animation:dropOut .2s cubic-bezier(0.4,0,1,1) both;}
@@ -130,8 +132,6 @@ nav{
 .ss-label{font-size:14px;color:var(--text);font-weight:600;}
 .ss-row.disabled .ss-label{color:var(--text3);}
 .ss-divider{height:1px;background:rgba(200,195,230,0.4);margin:10px 0;}
-
-/* Toggle */
 .toggle{position:relative;width:46px;height:26px;cursor:pointer;flex-shrink:0;}
 .toggle input{opacity:0;width:0;height:0;position:absolute;}
 .toggle-slider{position:absolute;inset:0;background:rgba(180,170,210,0.5);border-radius:13px;transition:.25s;}
@@ -139,17 +139,10 @@ nav{
 .toggle input:checked+.toggle-slider{background:var(--accent);}
 .toggle input:checked+.toggle-slider::after{transform:translateX(20px);}
 .toggle.disabled{opacity:0.4;pointer-events:none;}
-
-/* Accent swatches */
 .accent-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:4px 0;}
-.accent-swatch{
-  width:36px;height:36px;border-radius:50%;cursor:pointer;
-  transition:all .2s var(--ease2);border:2px solid transparent;
-}
+.accent-swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;transition:all .2s var(--ease2);border:2px solid transparent;}
 .accent-swatch:hover{transform:scale(1.15);}
 .accent-swatch.active{border-color:rgba(0,0,0,0.5);box-shadow:0 0 8px rgba(0,0,0,0.3);}
-
-/* Rooster selector */
 .rooster-select-btn{
   width:100%;display:flex;align-items:center;justify-content:space-between;
   padding:9px 12px;background:rgba(255,255,255,0.7);border:1px solid var(--glass-border);
@@ -161,8 +154,7 @@ nav{
 .rooster-dropdown-list{
   margin-top:6px;background:rgba(255,255,255,0.97);border:1px solid rgba(200,195,230,0.6);
   border-radius:var(--r4);overflow:hidden;display:none;
-  box-shadow:0 4px 20px rgba(80,60,160,0.15);
-  animation:dropIn .2s var(--ease2) both;
+  box-shadow:0 4px 20px rgba(80,60,160,0.15);animation:dropIn .2s var(--ease2) both;
 }
 .rooster-dropdown-list.open{display:block;}
 .rooster-dropdown-item{
@@ -175,7 +167,7 @@ nav{
 .rooster-dropdown-item.active{color:var(--accent);}
 .rooster-dropdown-item small{font-size:11px;color:var(--text3);flex-shrink:0;font-weight:500;}
 
-/* ── EXPIRED BANNER ── */
+/* ════════ EXPIRED BANNER ════════ */
 .expired-banner{
   background:linear-gradient(90deg,rgba(240,123,32,0.15),rgba(240,123,32,0.08));
   border-bottom:1px solid rgba(240,123,32,0.3);color:var(--orange);
@@ -183,18 +175,23 @@ nav{
 }
 .expired-banner.show{display:block;}
 
-/* ── MAIN ── */
+/* ════════ MAIN ════════ */
 .main{max-width:1400px;margin:0 auto;padding:28px 28px 60px;width:100%;}
 @media(max-width:750px){.main{display:none;}}
 
-/* ── GRID VIEW ── */
+/* ════════ GRID VIEW ════════ */
 .grid-view{display:none;}
 .grid-view.active{display:block;}
+
+/* Center the grid columns */
 .grid-container{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:14px;
 }
-@media(max-width:900px){.grid-container{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));}}
-.grid-day-col{display:flex;flex-direction:column;gap:10px;}
+.grid-day-col{
+  flex:0 0 auto;
+  width:clamp(155px, calc((100% - 14px*5) / 6), 220px);
+  display:flex;flex-direction:column;gap:10px;
+}
 
 .day-header{
   background:var(--glass);border:1px solid var(--glass-border);
@@ -206,25 +203,26 @@ nav{
 .day-hdr-num.today{color:var(--accent);}
 .day-hdr-month{font-size:11px;color:var(--text3);font-weight:600;margin-top:1px;}
 
-/* Activity card — matches set-card from Velios+ */
+/* Activity card */
 .activity-card{
   background:var(--glass);border:1px solid var(--glass-border);
   border-radius:var(--r2);padding:18px 16px;
   cursor:pointer;box-shadow:var(--glass-shadow);
-  transition:all .25s var(--ease);
+  transition:transform .25s var(--ease),box-shadow .25s var(--ease),opacity .25s var(--ease);
   position:relative;overflow:hidden;
   display:flex;flex-direction:column;gap:6px;
   will-change:transform;transform:translateZ(0);
+  /* used for desktop card→modal origin */
+  transform-style:preserve-3d;
 }
 .activity-card::before{
   content:'';position:absolute;left:0;top:0;bottom:0;
   width:3px;background:var(--accent);opacity:0.5;
 }
-.activity-card:hover{
-  transform:translateY(-4px) scale(1.04);
-  box-shadow:var(--glass-shadow-lg);
+.activity-card:hover:not(.animating){
+  transform:translateY(-4px) scale(1.04);box-shadow:var(--glass-shadow-lg);
 }
-.activity-card:active{transform:scale(0.97);}
+.activity-card:active:not(.animating){transform:scale(0.97);}
 .ac-icon{font-size:24px;line-height:1;}
 .ac-vak{font-size:15px;font-weight:800;color:var(--text);letter-spacing:-0.2px;margin-top:2px;}
 .ac-tijd{font-size:11px;color:var(--text3);font-weight:600;}
@@ -234,10 +232,26 @@ nav{
   color:var(--text3);font-size:13px;font-weight:600;box-shadow:var(--glass-shadow);
 }
 
-/* ── LIST VIEW ── */
+/* Grid dimmed state when modal open (desktop) */
+.grid-container.modal-open .activity-card:not(.modal-source){
+  opacity:0.25;
+  filter:blur(2px) scale(0.97);
+  transform:scale(0.97);
+  pointer-events:none;
+  transition:opacity .38s var(--ease),filter .38s var(--ease),transform .38s var(--ease);
+}
+.grid-container.modal-open .day-header{
+  opacity:0.25;filter:blur(2px);
+  transition:opacity .38s var(--ease),filter .38s var(--ease);
+}
+.grid-container.modal-open .empty-col{opacity:0.2;filter:blur(2px);}
+.grid-container.modal-open .activity-card.modal-source{
+  opacity:0;pointer-events:none;
+}
+
+/* ════════ LIST VIEW ════════ */
 .list-view{display:none;}
 .list-view.active{display:block;}
-
 .day-nav{display:flex;align-items:center;gap:8px;margin-bottom:20px;}
 .day-nav-btn{
   width:40px;height:40px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-border);
@@ -261,7 +275,6 @@ nav{
 .day-nav-tab.active .dnt-name,.day-nav-tab.active .dnt-date{color:#fff;}
 .day-nav-tab.today .dnt-date{color:var(--accent);}
 .day-nav-tab.active.today .dnt-date{color:#fff;}
-
 .list-panels{position:relative;}
 .list-panel{display:none;flex-direction:column;gap:10px;}
 .list-panel.active{display:flex;}
@@ -269,8 +282,6 @@ nav{
 @keyframes slideInL{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
 .list-panel.anim-r{animation:slideInR .28s var(--ease) both;}
 .list-panel.anim-l{animation:slideInL .28s var(--ease) both;}
-
-/* List row — matches library-item from Velios+ */
 .list-row{
   background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--r);
   padding:16px 20px;cursor:pointer;box-shadow:var(--glass-shadow);
@@ -287,10 +298,10 @@ nav{
 .lr-arrow{color:var(--text3);}
 .lr-arrow svg{width:16px;height:16px;}
 
-/* ── MOBILE VIEW ── */
+/* ════════ MOBILE VIEW ════════ */
 .mobile-view{display:none;flex-direction:column;}
 @media(max-width:750px){
-  .mobile-view{display:flex;min-height:calc(100dvh - 60px);}
+  .mobile-view{display:flex;min-height:calc(100dvh - var(--nav-h-mob));}
   .main{display:none;}
 }
 
@@ -298,12 +309,13 @@ nav{
   background:rgba(240,238,249,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid rgba(200,195,230,0.5);
   padding:12px 16px;
-  position:sticky;top:60px;z-index:100;
+  position:sticky;top:var(--nav-h-mob);z-index:100;
 }
 .mobile-day-title{font-size:19px;font-weight:800;letter-spacing:-0.3px;color:var(--text);margin-bottom:10px;}
 .mobile-day-tabs{
   display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;
   scrollbar-width:none;padding-bottom:2px;
+  justify-content:center; /* CENTER THE TABS */
 }
 .mobile-day-tabs::-webkit-scrollbar{display:none;}
 .mobile-day-tab{
@@ -326,11 +338,11 @@ nav{
 }
 .mobile-panel{
   flex-shrink:0;width:100%;overflow-y:auto;
-  padding:14px 16px 32px;display:flex;flex-direction:column;gap:10px;
+  padding:14px 16px;display:flex;flex-direction:column;gap:10px;
   -webkit-overflow-scrolling:touch;
+  /* safe-area bottom for webapp */
+  padding-bottom:calc(20px + env(safe-area-inset-bottom, 0px));
 }
-@supports(padding-bottom:env(safe-area-inset-bottom)){.mobile-panel{padding-bottom:calc(32px + env(safe-area-inset-bottom));}}
-
 .mobile-row{
   background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--r);
   padding:14px 16px;cursor:pointer;box-shadow:var(--glass-shadow);
@@ -345,54 +357,52 @@ nav{
 .mr-tijd{font-size:12px;color:var(--text3);font-weight:600;margin-top:2px;}
 .mobile-empty{text-align:center;padding:48px 20px;color:var(--text3);font-size:14px;font-weight:600;}
 
-/* ── LOADING ── */
-.loading-state{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:80px 20px;gap:16px;color:var(--text2);font-size:15px;font-weight:600;
-}
+/* ════════ LOADING ════════ */
+.loading-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:16px;color:var(--text2);font-size:15px;font-weight:600;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loading-spinner{
-  width:40px;height:40px;position:relative;
-}
-.loading-spinner::before{
-  content:'';position:absolute;inset:0;border:3px solid rgba(200,195,230,0.4);border-radius:50%;
-}
-.loading-spinner::after{
-  content:'';position:absolute;inset:0;
-  border:3px solid transparent;border-top-color:var(--accent);border-right-color:var(--accent);
-  border-radius:50%;animation:spin .9s linear infinite;
-}
+.loading-spinner{width:40px;height:40px;position:relative;}
+.loading-spinner::before{content:'';position:absolute;inset:0;border:3px solid rgba(200,195,230,0.4);border-radius:50%;}
+.loading-spinner::after{content:'';position:absolute;inset:0;border:3px solid transparent;border-top-color:var(--accent);border-right-color:var(--accent);border-radius:50%;animation:spin .9s linear infinite;}
 
-/* ── MODAL ── */
+/* ════════ DESKTOP MODAL ════════
+   The modal is a floating card. On open we animate from the clicked card's
+   position/size to the final modal rect using a FLIP-style approach.
+   The actual modal-panel starts invisible; we use a clone (modal-ghost) that
+   starts at the card rect and expands to the modal rect, then we swap. */
 .modal-overlay{
   position:fixed;inset:0;z-index:1000;
-  display:flex;align-items:flex-end;justify-content:center;
-  pointer-events:none;opacity:0;transition:opacity .25s;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
 }
-.modal-overlay.open{pointer-events:all;opacity:1;}
+.modal-overlay.open{pointer-events:all;}
+
+/* backdrop fades in */
 .modal-backdrop{
   position:absolute;inset:0;
   background:rgba(160,150,200,0.4);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  opacity:0;transition:opacity .35s var(--ease);
 }
+.modal-overlay.open .modal-backdrop{opacity:1;}
+
+/* The actual modal panel */
 .modal-panel{
-  position:relative;z-index:1;width:100%;max-width:620px;max-height:88dvh;
+  position:relative;z-index:1;
+  width:min(680px, 90vw);
+  max-height:84dvh;
   background:var(--glass);border:1.5px solid var(--glass-border);
-  border-radius:var(--r2) var(--r2) 0 0;
-  padding:10px 28px 36px;
+  border-radius:var(--r2);
+  padding:28px 32px 36px;
   overflow-y:auto;-webkit-overflow-scrolling:touch;
-  transform:translateY(100%);transition:transform .35s cubic-bezier(0.4,0,0.2,1);
-  box-shadow:0 -8px 40px rgba(80,60,160,0.15);
+  box-shadow:0 24px 64px rgba(80,60,160,0.22);
+  opacity:0;
+  pointer-events:none;
+  /* desktop: no default transition, JS controls */
 }
-.modal-overlay.open .modal-panel{transform:translateY(0);}
-@media(min-width:751px){
-  .modal-overlay{align-items:center;}
-  .modal-panel{border-radius:var(--r2);max-height:84dvh;transform:scale(0.92) translateY(16px);opacity:0;transition:transform .35s var(--ease2),opacity .25s;}
-  .modal-overlay.open .modal-panel{transform:scale(1) translateY(0);opacity:1;}
+.modal-overlay.open .modal-panel{
+  opacity:1;pointer-events:all;
 }
-@media(max-width:750px){.modal-panel{padding:10px 20px 32px;}}
-.modal-handle{width:40px;height:4px;background:rgba(200,195,230,0.7);border-radius:2px;margin:0 auto 18px;}
-@media(min-width:751px){.modal-handle{display:none;}}
+/* close button top-right (desktop default) */
 .modal-close-btn{
   position:absolute;top:18px;right:20px;width:32px;height:32px;border-radius:50%;
   background:var(--accent-light);color:var(--accent);border:none;
@@ -401,11 +411,66 @@ nav{
 }
 .modal-close-btn:hover{background:rgba(232,58,74,0.1);color:var(--red);}
 .modal-close-btn svg{width:14px;height:14px;}
+
+/* ── MOBILE MODAL: fully fullscreen, slide-left animation ── */
+@media(max-width:750px){
+  .modal-overlay{align-items:flex-start;}
+  .modal-backdrop{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg-grad);}
+  .modal-panel{
+    width:100%;max-width:100%;
+    height:100dvh;max-height:100dvh;
+    border-radius:0;border:none;
+    padding:0;
+    overflow-y:auto;
+    /* slide from right */
+    transform:translateX(100%);
+    opacity:1;
+    transition:transform .36s cubic-bezier(0.4,0,0.2,1);
+  }
+  .modal-overlay.open .modal-panel{transform:translateX(0);}
+  /* back button on left for mobile */
+  .modal-close-btn{
+    top:calc(env(safe-area-inset-top,0px) + 14px);
+    left:16px;right:auto;
+    background:var(--accent-light);
+  }
+  /* inner scroll area */
+  .modal-scroll{
+    padding:calc(env(safe-area-inset-top,0px) + 56px) 20px calc(env(safe-area-inset-bottom,0px) + 32px);
+  }
+}
+@media(min-width:751px){
+  .modal-scroll{padding:0;}
+  .modal-handle{display:none;}
+}
+
+/* Mobile modal handle */
+.modal-handle{display:none;}
+
+/* ── DESKTOP GHOST (card-to-modal FLIP clone) ── */
+.modal-ghost{
+  position:fixed;z-index:1001;
+  background:var(--glass);border:1.5px solid var(--glass-border);
+  border-radius:var(--r2);
+  box-shadow:var(--glass-shadow);
+  display:flex;flex-direction:column;gap:6px;
+  padding:18px 16px;
+  overflow:hidden;
+  pointer-events:none;
+  will-change:transform,border-radius,box-shadow;
+}
+.modal-ghost::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--accent);opacity:0.5;
+  transition:opacity .25s;
+}
+/* content inside ghost */
+.ghost-card-content{display:flex;flex-direction:column;gap:6px;opacity:1;transition:opacity .18s;}
+.ghost-modal-content{position:absolute;inset:0;opacity:0;transition:opacity .22s;padding:28px 32px 36px;overflow:hidden;}
+
 .modal-vak-name{font-size:26px;font-weight:800;letter-spacing:-0.4px;color:var(--text);margin-bottom:5px;padding-right:48px;}
 .modal-meta{font-size:13px;color:var(--text2);font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:24px;}
 .modal-meta svg{width:13px;height:13px;color:var(--text3);}
-
-/* Shortcut buttons */
 .modal-shortcuts{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;}
 .shortcut-btn{
   flex:1;min-width:80px;max-width:140px;padding:14px 8px;border-radius:var(--r2);
@@ -417,28 +482,19 @@ nav{
 }
 .shortcut-btn:hover{background:rgba(255,255,255,0.95);transform:translateY(-3px) scale(1.04);box-shadow:var(--glass-shadow-lg);color:var(--text);}
 .shortcut-btn:active{transform:scale(0.97);}
-.shortcut-btn.primary{
-  background:linear-gradient(180deg,var(--accent) 0%,var(--accent2) 100%);
-  color:#fff;border-color:var(--accent);
-  box-shadow:0 4px 16px var(--accent-light),inset 1px 1px 0 rgba(255,255,255,0.2);
-}
+.shortcut-btn.primary{background:linear-gradient(180deg,var(--accent) 0%,var(--accent2) 100%);color:#fff;border-color:var(--accent);box-shadow:0 4px 16px var(--accent-light),inset 1px 1px 0 rgba(255,255,255,0.2);}
 .shortcut-btn.primary:hover{filter:brightness(1.1);transform:translateY(-3px) scale(1.02);}
 .shortcut-btn svg{width:26px;height:26px;}
-
-/* Stof */
 .modal-stof{display:flex;flex-direction:column;gap:0;}
 .stof-block{padding:16px 0;}
 .stof-divider{height:1px;background:rgba(200,195,230,0.4);}
-.stof-label{
-  font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;
-  display:flex;align-items:center;gap:7px;
-}
+.stof-label{font-size:14px;font-weight:800;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:7px;}
 .stof-label::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);opacity:0.8;flex-shrink:0;}
 .stof-text{font-size:14px;line-height:1.7;color:var(--text2);padding-left:15px;}
 .stof-text i{font-style:italic;color:var(--text);}
 .stof-empty{color:var(--text3);font-style:italic;}
 
-/* ── TOAST ── */
+/* ════════ TOAST ════════ */
 #toast{
   position:fixed;bottom:24px;right:24px;z-index:9999;
   background:rgba(252,250,255,0.99);border:1px solid rgba(200,195,230,0.7);
@@ -448,76 +504,112 @@ nav{
   transition:all .25s var(--ease2);
 }
 #toast.show{opacity:1;transform:translateY(0);}
-@media(max-width:750px){#toast{bottom:90px;left:16px;right:16px;text-align:center;}}
+@media(max-width:750px){
+  #toast{
+    bottom:calc(env(safe-area-inset-bottom,0px) + 16px);
+    left:16px;right:16px;text-align:center;
+  }
+}
+
+/* ════════ ENTRANCE ANIMATIONS ════════ */
+/* Desktop: cascade grid reveal */
+.grid-day-col{
+  /* will be driven by JS with CSS custom properties */
+  opacity:0;
+  transform:scale(0.78) translateY(12px);
+  filter:blur(6px);
+}
+.grid-day-col.entered{
+  opacity:1;transform:scale(1) translateY(0);filter:blur(0px);
+  transition:
+    opacity .42s var(--ease2),
+    transform .42s var(--ease2),
+    filter .35s var(--ease);
+}
+/* header fade in */
+.nav-inner,.expired-banner{opacity:0;transition:opacity .4s var(--ease);}
+.nav-inner.nav-entered,.expired-banner.nav-entered{opacity:1;}
+/* Activity cards inside a col also stagger */
+.grid-day-col .activity-card,.grid-day-col .day-header,.grid-day-col .empty-col{
+  opacity:0;transform:scale(0.86) translateY(8px);
+}
+.grid-day-col.entered .day-header{
+  opacity:1;transform:scale(1) translateY(0);
+  transition:opacity .32s var(--ease2),transform .32s var(--ease2);
+  transition-delay:0ms;
+}
+.grid-day-col.entered .activity-card,.grid-day-col.entered .empty-col{
+  opacity:1;transform:scale(1) translateY(0);
+  transition:opacity .32s var(--ease2),transform .32s var(--ease2);
+  /* delay set inline by JS */
+}
+
+/* Mobile entrance: simple fade+slide up */
+.mobile-view{opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease2),transform .5s var(--ease2);}
+.mobile-view.mob-entered{opacity:1;transform:none;}
 </style>
 </head>
 <body>
 
 <!-- ── NAV ── -->
 <nav>
-  <div class="nav-logo">
-    <div class="nav-logo-mark">v</div>
-    <div>
-      <div class="nav-logo-title">vRooster<span>.</span></div>
-      <div class="nav-logo-sub" id="roosterSubtitle">Laden…</div>
+  <div class="nav-inner" id="navInner">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">v</div>
+      <div>
+        <div class="nav-logo-title">vRooster<span>.</span></div>
+        <div class="nav-logo-sub" id="roosterSubtitle">Laden…</div>
+      </div>
     </div>
-  </div>
-  <div class="nav-spacer"></div>
+    <div class="nav-spacer"></div>
 
-  <div class="view-toggle" id="viewToggle">
-    <button class="view-btn active" id="btnGrid" onclick="setView('grid')">
-      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
-      Grid
-    </button>
-    <button class="view-btn" id="btnList" onclick="setView('list')">
-      <svg viewBox="0 0 16 16" fill="currentColor"><rect x="4" y="2" width="10" height="2" rx="1"/><rect x="1" y="2" width="2" height="2" rx="0.5"/><rect x="4" y="7" width="10" height="2" rx="1"/><rect x="1" y="7" width="2" height="2" rx="0.5"/><rect x="4" y="12" width="10" height="2" rx="1"/><rect x="1" y="12" width="2" height="2" rx="0.5"/></svg>
-      Lijst
-    </button>
-  </div>
+    <div class="view-toggle" id="viewToggle">
+      <button class="view-btn active" id="btnGrid" onclick="setView('grid')">
+        <svg viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
+        Grid
+      </button>
+      <button class="view-btn" id="btnList" onclick="setView('list')">
+        <svg viewBox="0 0 16 16" fill="currentColor"><rect x="4" y="2" width="10" height="2" rx="1"/><rect x="1" y="2" width="2" height="2" rx="0.5"/><rect x="4" y="7" width="10" height="2" rx="1"/><rect x="1" y="7" width="2" height="2" rx="0.5"/><rect x="4" y="12" width="10" height="2" rx="1"/><rect x="1" y="12" width="2" height="2" rx="0.5"/></svg>
+        Lijst
+      </button>
+    </div>
 
-  <div class="settings-dropdown-wrap">
-    <button class="btn-icon" id="settingsBtn" onclick="toggleSettings()" title="Instellingen">
-      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
-    </button>
-
-    <div class="settings-dropdown" id="settingsDropdown">
-
-      <!-- Rooster -->
-      <div class="ss-section" style="margin-bottom:14px;">
-        <div class="ss-title">Rooster</div>
-        <button class="rooster-select-btn" onclick="toggleRoosterDropdown()">
-          <span id="roosterSelectLabel">Laden…</span>
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
-        </button>
-        <div class="rooster-dropdown-list" id="roosterDropdownList"></div>
-      </div>
-      <div class="ss-divider"></div>
-
-      <!-- Sync -->
-      <div class="ss-section" style="margin:14px 0;">
-        <div class="ss-title">Synchronisatie</div>
-        <div class="ss-row">
-          <span class="ss-label">Synchroniseer met Velios+</span>
-          <label class="toggle"><input type="checkbox" id="toggleSync" checked onchange="handleSyncChange()"><span class="toggle-slider"></span></label>
+    <div class="settings-dropdown-wrap">
+      <button class="btn-icon" id="settingsBtn" onclick="toggleSettings()" title="Instellingen">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+      </button>
+      <div class="settings-dropdown" id="settingsDropdown">
+        <div style="margin-bottom:14px;">
+          <div class="ss-title">Rooster</div>
+          <button class="rooster-select-btn" onclick="toggleRoosterDropdown()">
+            <span id="roosterSelectLabel">Laden…</span>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4"/></svg>
+          </button>
+          <div class="rooster-dropdown-list" id="roosterDropdownList"></div>
         </div>
-      </div>
-      <div class="ss-divider"></div>
-
-      <!-- Verschijning -->
-      <div class="ss-section" style="margin-top:14px;">
-        <div class="ss-title">Verschijning</div>
-        <div class="ss-row" id="rowDark">
-          <span class="ss-label">Donkere modus</span>
-          <label class="toggle" id="darkToggle"><input type="checkbox" id="toggleDark" onchange="handleDarkChange()"><span class="toggle-slider"></span></label>
+        <div class="ss-divider"></div>
+        <div style="margin:14px 0;">
+          <div class="ss-title">Synchronisatie</div>
+          <div class="ss-row">
+            <span class="ss-label">Synchroniseer met Velios+</span>
+            <label class="toggle"><input type="checkbox" id="toggleSync" checked onchange="handleSyncChange()"><span class="toggle-slider"></span></label>
+          </div>
         </div>
-        <div class="ss-title" style="margin-top:10px;">Accentkleur</div>
-        <div class="accent-grid" id="accentGrid"></div>
+        <div class="ss-divider"></div>
+        <div style="margin-top:14px;">
+          <div class="ss-title">Verschijning</div>
+          <div class="ss-row" id="rowDark">
+            <span class="ss-label">Donkere modus</span>
+            <label class="toggle" id="darkToggle"><input type="checkbox" id="toggleDark" onchange="handleDarkChange()"><span class="toggle-slider"></span></label>
+          </div>
+          <div class="ss-title" style="margin-top:10px;">Accentkleur</div>
+          <div class="accent-grid" id="accentGrid"></div>
+        </div>
       </div>
     </div>
   </div>
 </nav>
 
-<!-- Expired banner -->
 <div class="expired-banner" id="expiredBanner">⚠️ Dit rooster is verlopen. Je bekijkt een verlopen versie.</div>
 
 <!-- ── DESKTOP MAIN ── -->
@@ -526,13 +618,9 @@ nav{
     <div class="loading-spinner"></div>
     <div>Rooster laden…</div>
   </div>
-
-  <!-- Grid view -->
   <div class="grid-view active" id="gridView">
     <div class="grid-container" id="gridContainer"></div>
   </div>
-
-  <!-- List view -->
   <div class="list-view" id="listView">
     <div class="day-nav" id="dayNav">
       <button class="day-nav-btn" id="dayNavPrev" onclick="navigateDay(-1)" disabled>
@@ -560,475 +648,497 @@ nav{
 
 <!-- ── MODAL ── -->
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal-backdrop" onclick="closeModal()"></div>
+  <div class="modal-backdrop" id="modalBackdrop" onclick="closeModal()"></div>
   <div class="modal-panel" id="modalPanel">
-    <div class="modal-handle"></div>
-    <button class="modal-close-btn" onclick="closeModal()">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg>
+    <!-- back arrow for mobile (left), × for desktop (right) -->
+    <button class="modal-close-btn" id="modalCloseBtn" onclick="closeModal()">
+      <!-- desktop: × -->
+      <svg class="close-x" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg>
+      <!-- mobile: ← -->
+      <svg class="close-back" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:none"><path d="M10 4l-4 4 4 4"/></svg>
     </button>
-    <div class="modal-vak-name" id="modalVakName">—</div>
-    <div class="modal-meta" id="modalMeta"></div>
-    <div class="modal-shortcuts" id="modalShortcuts"></div>
-    <div class="modal-stof" id="modalStof"></div>
+    <div class="modal-scroll" id="modalScroll">
+      <div class="modal-vak-name" id="modalVakName">—</div>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-shortcuts" id="modalShortcuts"></div>
+      <div class="modal-stof" id="modalStof"></div>
+    </div>
   </div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════
-   CONSTANTS
-═══════════════════════════════════════ */
-const ACCENTS = [
-  { hex:'#0062ff', label:'Blauw' },
-  { hex:'#ff6b6b', label:'Rood' },
-  { hex:'#10b981', label:'Groen' },
-  { hex:'#f59e0b', label:'Amber' },
-  { hex:'#8b5cf6', label:'Paars' },
-];
-const NL_DAYS     = ['zo','ma','di','wo','do','vr','za'];
-const NL_DAYS_F   = ['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'];
-const NL_MON      = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
-const NL_MON_F    = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
-const ROOSTER_DIR = './rooster/';
+/* ═══════════ CONSTANTS ═══════════ */
+const ACCENTS=[{hex:'#0062ff',label:'Blauw'},{hex:'#ff6b6b',label:'Rood'},{hex:'#10b981',label:'Groen'},{hex:'#f59e0b',label:'Amber'},{hex:'#8b5cf6',label:'Paars'}];
+const NL_DAYS=['zo','ma','di','wo','do','vr','za'];
+const NL_DAYS_F=['Zondag','Maandag','Dinsdag','Woensdag','Donderdag','Vrijdag','Zaterdag'];
+const NL_MON=['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+const NL_MON_F=['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+const ROOSTER_DIR='./rooster/';
 
-/* ═══════════════════════════════════════
-   STATE
-═══════════════════════════════════════ */
-let allRoosters = [];
-let currentRooster = null;
-let days = [];
-let currentDayIdx = 0;
-let currentView = 'grid';
-let ddOpen = false;
-let settings = { syncVelios: true, dark: false, accent: '#0062ff' };
+/* ═══════════ STATE ═══════════ */
+let allRoosters=[],currentRooster=null,days=[],currentDayIdx=0,currentView='grid';
+let ddOpen=false;
+let settings={syncVelios:true,dark:false,accent:'#0062ff'};
+let modalOpen=false;
+let ghostEl=null; // FLIP ghost element
 
-/* ═══════════════════════════════════════
-   THEME
-═══════════════════════════════════════ */
-function loadSettings() {
-  const s = safeJson(localStorage.getItem('vrooster_settings'));
-  if (s) settings = { ...settings, ...s };
-  if (settings.syncVelios) {
-    const v = safeJson(localStorage.getItem('sd_theme'));
-    if (v) {
-      if (v.darkMode !== undefined)  settings.dark   = v.darkMode;
-      if (v.accentColor !== undefined) settings.accent = v.accentColor;
-    }
+/* ═══════════ MOBILE DETECT ═══════════ */
+const isMob=()=>window.innerWidth<=750;
+
+/* ═══════════ THEME ═══════════ */
+function loadSettings(){
+  const s=safeJson(localStorage.getItem('vrooster_settings'));
+  if(s) settings={...settings,...s};
+  if(settings.syncVelios){
+    const v=safeJson(localStorage.getItem('sd_theme'));
+    if(v){if(v.darkMode!==undefined)settings.dark=v.darkMode;if(v.accentColor!==undefined)settings.accent=v.accentColor;}
   }
-  applyTheme();
-  renderSwatches();
-  document.getElementById('toggleSync').checked = settings.syncVelios;
-  document.getElementById('toggleDark').checked = settings.dark;
+  applyTheme();renderSwatches();
+  document.getElementById('toggleSync').checked=settings.syncVelios;
+  document.getElementById('toggleDark').checked=settings.dark;
   updateDisabled();
+  // Show/hide close icon vs back arrow
+  updateModalCloseBtn();
 }
-function saveSettings() { localStorage.setItem('vrooster_settings', JSON.stringify(settings)); }
-function safeJson(s) { try { return s ? JSON.parse(s) : null; } catch(e) { return null; } }
+function saveSettings(){localStorage.setItem('vrooster_settings',JSON.stringify(settings));}
+function safeJson(s){try{return s?JSON.parse(s):null;}catch(e){return null;}}
 
-function applyTheme() {
-  const { dark, accent } = settings;
-  document.body.classList.toggle('dark-mode', dark);
-  document.getElementById('theme-color-meta').content = dark ? '#0a0812' : '#f0eef9';
-  const R = document.documentElement.style;
-  if (dark) {
+function applyTheme(){
+  const{dark,accent}=settings;
+  document.body.classList.toggle('dark-mode',dark);
+  document.getElementById('theme-color-meta').content=dark?'#0a0812':'#f0eef9';
+  const R=document.documentElement.style;
+  if(dark){
     R.setProperty('--bg-grad','linear-gradient(180deg,rgb(10,10,10) 0%,rgb(10,8,18) 100%)');
-    R.setProperty('--glass','rgb(34,33,41)');
-    R.setProperty('--glass2','rgba(34,33,41,0.9)');
-    R.setProperty('--text','#ffffff');
-    R.setProperty('--text2','#e9e9e9');
-    R.setProperty('--text3','rgba(255,255,255,0.55)');
+    R.setProperty('--glass','rgb(34,33,41)');R.setProperty('--glass2','rgba(34,33,41,0.9)');
+    R.setProperty('--text','#ffffff');R.setProperty('--text2','#e9e9e9');R.setProperty('--text3','rgba(255,255,255,0.55)');
     R.setProperty('--glass-border','rgba(64,73,112,0.6)');
     R.setProperty('--glass-shadow','0 0px 10px rgba(0,5,48,0.8),inset 1px 1px 0 rgba(88,93,120,0.9)');
     R.setProperty('--glass-shadow-lg','0 8px 32px rgba(0,5,48,0.8),inset 1px 1px 0 rgba(88,93,120,0.9)');
   } else {
     R.setProperty('--bg-grad','linear-gradient(160deg,#f0eef9 0%,#ddd8f0 50%,#cfc8e8 100%)');
-    R.setProperty('--glass','rgba(255,255,255,0.90)');
-    R.setProperty('--glass2','rgba(255,255,255,0.80)');
-    R.setProperty('--text','#0b0f2a');
-    R.setProperty('--text2','#3d3a55');
-    R.setProperty('--text3','#7c7899');
+    R.setProperty('--glass','rgba(255,255,255,0.90)');R.setProperty('--glass2','rgba(255,255,255,0.80)');
+    R.setProperty('--text','#0b0f2a');R.setProperty('--text2','#3d3a55');R.setProperty('--text3','#7c7899');
     R.setProperty('--glass-border','rgba(200,195,230,0.6)');
     R.setProperty('--glass-shadow','0 2px 8px rgba(0,98,255,0.1),inset 1px 1px 0 rgba(255,255,255,1),inset -1px -1px 2px rgba(255,255,255,0.5)');
     R.setProperty('--glass-shadow-lg','0 8px 32px rgba(0,98,255,0.15),inset 1px 1px 0 rgba(255,255,255,1),inset -1px -1px 2px rgba(255,255,255,0.5)');
   }
-  const h = accent.replace('#','');
-  const r = parseInt(h.substr(0,2),16), g = parseInt(h.substr(2,2),16), b = parseInt(h.substr(4,2),16);
-  R.setProperty('--accent', accent);
-  R.setProperty('--accent2', `rgb(${Math.max(0,r-20)},${Math.max(0,g-20)},${Math.max(0,b-20)})`);
-  R.setProperty('--accent-light', `rgba(${r},${g},${b},0.12)`);
+  const h=accent.replace('#','');
+  const r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);
+  R.setProperty('--accent',accent);
+  R.setProperty('--accent2',`rgb(${Math.max(0,r-20)},${Math.max(0,g-20)},${Math.max(0,b-20)})`);
+  R.setProperty('--accent-light',`rgba(${r},${g},${b},0.12)`);
 }
+function handleSyncChange(){
+  settings.syncVelios=document.getElementById('toggleSync').checked;
+  if(settings.syncVelios){const v=safeJson(localStorage.getItem('sd_theme'));if(v){if(v.darkMode!==undefined)settings.dark=v.darkMode;if(v.accentColor!==undefined)settings.accent=v.accentColor;}document.getElementById('toggleDark').checked=settings.dark;}
+  saveSettings();applyTheme();renderSwatches();updateDisabled();
+}
+function handleDarkChange(){if(settings.syncVelios)return;settings.dark=document.getElementById('toggleDark').checked;saveSettings();applyTheme();}
+function setAccent(c){if(settings.syncVelios)return;settings.accent=c;saveSettings();applyTheme();renderSwatches();}
+function updateDisabled(){
+  const s=settings.syncVelios;
+  document.getElementById('rowDark').classList.toggle('disabled',s);
+  document.getElementById('darkToggle').classList.toggle('disabled',s);
+  const ag=document.getElementById('accentGrid');ag.style.opacity=s?'0.4':'';ag.style.pointerEvents=s?'none':'';
+}
+function renderSwatches(){
+  document.getElementById('accentGrid').innerHTML=ACCENTS.map(c=>`<div class="accent-swatch ${c.hex===settings.accent?'active':''}" style="background:${c.hex}" title="${c.label}" onclick="setAccent('${c.hex}')"></div>`).join('');
+}
+function updateModalCloseBtn(){
+  const mob=isMob();
+  document.querySelector('.close-x').style.display=mob?'none':'block';
+  document.querySelector('.close-back').style.display=mob?'block':'none';
+}
+window.addEventListener('resize',updateModalCloseBtn);
 
-function handleSyncChange() {
-  settings.syncVelios = document.getElementById('toggleSync').checked;
-  if (settings.syncVelios) {
-    const v = safeJson(localStorage.getItem('sd_theme'));
-    if (v) {
-      if (v.darkMode !== undefined) settings.dark = v.darkMode;
-      if (v.accentColor !== undefined) settings.accent = v.accentColor;
-    }
-    document.getElementById('toggleDark').checked = settings.dark;
-  }
-  saveSettings(); applyTheme(); renderSwatches(); updateDisabled();
+/* ═══════════ SETTINGS DROPDOWN ═══════════ */
+function toggleSettings(){
+  const dd=document.getElementById('settingsDropdown');
+  if(ddOpen){dd.classList.add('closing');setTimeout(()=>{dd.classList.remove('open','closing');ddOpen=false;},200);}
+  else{dd.classList.remove('closing');dd.classList.add('open');ddOpen=true;setTimeout(()=>document.addEventListener('click',onOutside,{once:true}),10);}
 }
-function handleDarkChange() {
-  if (settings.syncVelios) return;
-  settings.dark = document.getElementById('toggleDark').checked;
-  saveSettings(); applyTheme();
+function onOutside(e){
+  const wrap=document.querySelector('.settings-dropdown-wrap');
+  if(!wrap.contains(e.target)){const dd=document.getElementById('settingsDropdown');dd.classList.add('closing');setTimeout(()=>{dd.classList.remove('open','closing');ddOpen=false;},200);}
+  else if(ddOpen) setTimeout(()=>document.addEventListener('click',onOutside,{once:true}),10);
 }
-function setAccent(color) {
-  if (settings.syncVelios) return;
-  settings.accent = color;
-  saveSettings(); applyTheme(); renderSwatches();
-  // Dropdown stays open — just re-render swatches
-}
-function updateDisabled() {
-  const s = settings.syncVelios;
-  document.getElementById('rowDark').classList.toggle('disabled', s);
-  document.getElementById('darkToggle').classList.toggle('disabled', s);
-  const ag = document.getElementById('accentGrid');
-  ag.style.opacity = s ? '0.4' : '';
-  ag.style.pointerEvents = s ? 'none' : '';
-}
-function renderSwatches() {
-  document.getElementById('accentGrid').innerHTML = ACCENTS.map(c =>
-    `<div class="accent-swatch ${c.hex===settings.accent?'active':''}" style="background:${c.hex}" title="${c.label}" onclick="setAccent('${c.hex}')"></div>`
-  ).join('');
-}
+function toggleRoosterDropdown(){document.getElementById('roosterDropdownList').classList.toggle('open');}
 
-/* ═══════════════════════════════════════
-   DROPDOWN
-═══════════════════════════════════════ */
-function toggleSettings() {
-  const dd = document.getElementById('settingsDropdown');
-  if (ddOpen) {
-    dd.classList.add('closing');
-    setTimeout(() => { dd.classList.remove('open','closing'); ddOpen = false; }, 200);
-  } else {
-    dd.classList.remove('closing');
-    dd.classList.add('open');
-    ddOpen = true;
-    setTimeout(() => document.addEventListener('click', onOutside, { once:true }), 10);
-  }
-}
-function onOutside(e) {
-  const wrap = document.querySelector('.settings-dropdown-wrap');
-  if (!wrap.contains(e.target)) {
-    const dd = document.getElementById('settingsDropdown');
-    dd.classList.add('closing');
-    setTimeout(() => { dd.classList.remove('open','closing'); ddOpen = false; }, 200);
-  } else if (ddOpen) {
-    setTimeout(() => document.addEventListener('click', onOutside, { once:true }), 10);
-  }
-}
-function toggleRoosterDropdown() {
-  document.getElementById('roosterDropdownList').classList.toggle('open');
-}
-
-/* ═══════════════════════════════════════
-   ROOSTER LOADING
-═══════════════════════════════════════ */
-async function discoverRoosters() {
-  let found = [];
-  try {
-    const r = await fetch(ROOSTER_DIR + 'index.json');
-    if (r.ok) {
-      const list = await r.json();
-      for (const f of list) {
-        try { const res = await fetch(ROOSTER_DIR + f); if (res.ok) { const d = await res.json(); found.push({ file:f, data:d }); } } catch(e) {}
-      }
-      return found;
-    }
-  } catch(e) {}
-  const cands = ['toetsweek2.vrooster','toetsweek1.vrooster','periode3.vrooster','periode2.vrooster','periode1.vrooster'];
-  for (const f of cands) {
-    try { const res = await fetch(ROOSTER_DIR + f); if (res.ok) { const d = await res.json(); found.push({ file:f, data:d }); } } catch(e) {}
+/* ═══════════ ROOSTER LOADING ═══════════ */
+async function discoverRoosters(){
+  let found=[];
+  try{const r=await fetch(ROOSTER_DIR+'index.json');if(r.ok){const list=await r.json();for(const f of list){try{const res=await fetch(ROOSTER_DIR+f);if(res.ok){const d=await res.json();found.push({file:f,data:d});}}catch(e){}}return found;}}catch(e){}
+  for(const f of['toetsweek2.vrooster','toetsweek1.vrooster','periode3.vrooster','periode2.vrooster','periode1.vrooster']){
+    try{const res=await fetch(ROOSTER_DIR+f);if(res.ok){const d=await res.json();found.push({file:f,data:d});}}catch(e){}
   }
   return found;
 }
-
-async function initApp() {
+async function initApp(){
   loadSettings();
-  const roosters = await discoverRoosters();
-  allRoosters = roosters;
-  document.getElementById('loadingState').style.display = 'none';
-  if (!roosters.length) {
-    document.getElementById('gridContainer').innerHTML = `<div style="color:var(--text3);padding:40px;text-align:center;grid-column:1/-1;font-size:14px;font-weight:600;">Geen .vrooster bestanden gevonden in ./rooster/</div>`;
-    document.getElementById('gridView').classList.add('active');
-    return;
-  }
-  roosters.sort((a,b) => new Date(b.data.startdatum) - new Date(a.data.startdatum));
+  const roosters=await discoverRoosters();
+  allRoosters=roosters;
+  document.getElementById('loadingState').style.display='none';
+  if(!roosters.length){document.getElementById('gridContainer').innerHTML=`<div style="color:var(--text3);padding:40px;text-align:center;font-size:14px;font-weight:600;width:100%;">Geen .vrooster bestanden gevonden in ./rooster/</div>`;document.getElementById('gridView').classList.add('active');triggerEntranceAnim();return;}
+  roosters.sort((a,b)=>new Date(b.data.startdatum)-new Date(a.data.startdatum));
   buildRoosterSelector();
-  loadRooster(roosters[0], 0);
+  loadRooster(roosters[0],0);
 }
-
-function buildRoosterSelector() {
-  document.getElementById('roosterDropdownList').innerHTML = allRoosters.map((r,i) =>
-    `<div class="rooster-dropdown-item ${i===0?'active':''}" id="rItem${i}" onclick="selectRooster(${i})">
-       <span>${esc(r.data.naam)}<span style="font-size:11px;color:var(--text3);margin-left:6px;font-weight:500;">${esc(r.data.klas)}</span></span>
-       <small>${fDate(r.data.startdatum)} – ${fDate(r.data.einddatum)}</small>
-    </div>`
-  ).join('');
+function buildRoosterSelector(){
+  document.getElementById('roosterDropdownList').innerHTML=allRoosters.map((r,i)=>`<div class="rooster-dropdown-item ${i===0?'active':''}" id="rItem${i}" onclick="selectRooster(${i})"><span>${esc(r.data.naam)}<span style="font-size:11px;color:var(--text3);margin-left:6px;font-weight:500;">${esc(r.data.klas)}</span></span><small>${fDate(r.data.startdatum)} – ${fDate(r.data.einddatum)}</small></div>`).join('');
 }
-
-function selectRooster(idx) {
-  document.querySelectorAll('.rooster-dropdown-item').forEach((el,i) => el.classList.toggle('active', i===idx));
+function selectRooster(idx){
+  document.querySelectorAll('.rooster-dropdown-item').forEach((el,i)=>el.classList.toggle('active',i===idx));
   document.getElementById('roosterDropdownList').classList.remove('open');
-  loadRooster(allRoosters[idx], idx);
+  loadRooster(allRoosters[idx],idx);
+}
+function loadRooster(entry,idx){
+  currentRooster=entry.data;
+  document.getElementById('roosterSelectLabel').textContent=currentRooster.naam;
+  document.getElementById('roosterSubtitle').textContent=`${currentRooster.naam} · ${currentRooster.klas}`;
+  const exp=new Date()>new Date(currentRooster.einddatum+'T23:59:59');
+  document.getElementById('expiredBanner').classList.toggle('show',exp);
+  buildDays();renderAll();
+  triggerEntranceAnim();
 }
 
-function loadRooster(entry, idx) {
-  currentRooster = entry.data;
-  document.getElementById('roosterSelectLabel').textContent = currentRooster.naam;
-  document.getElementById('roosterSubtitle').textContent = `${currentRooster.naam} · ${currentRooster.klas}`;
-  const exp = new Date() > new Date(currentRooster.einddatum + 'T23:59:59');
-  document.getElementById('expiredBanner').classList.toggle('show', exp);
-  buildDays();
-  renderAll();
+/* ═══════════ BUILD DAYS ═══════════ */
+function buildDays(){
+  const map={};
+  for(const a of currentRooster.activiteiten){if(!map[a.datum])map[a.datum]=[];map[a.datum].push(a);}
+  for(const d in map)map[d].sort((a,b)=>a.tijd.localeCompare(b.tijd));
+  days=Object.keys(map).sort().map(d=>({date:d,activities:map[d]}));
+  const today=todayStr();currentDayIdx=days.findIndex(d=>d.date===today);if(currentDayIdx<0)currentDayIdx=0;
 }
 
-/* ═══════════════════════════════════════
-   BUILD DAYS
-═══════════════════════════════════════ */
-function buildDays() {
-  const map = {};
-  for (const a of currentRooster.activiteiten) {
-    if (!map[a.datum]) map[a.datum] = [];
-    map[a.datum].push(a);
-  }
-  for (const d in map) map[d].sort((a,b)=>a.tijd.localeCompare(b.tijd));
-  days = Object.keys(map).sort().map(d => ({ date:d, activities:map[d] }));
-  const today = todayStr();
-  currentDayIdx = days.findIndex(d=>d.date===today);
-  if (currentDayIdx < 0) currentDayIdx = 0;
-}
+/* ═══════════ RENDER ═══════════ */
+function renderAll(){renderGrid();renderList();renderMobile();}
 
-/* ═══════════════════════════════════════
-   RENDER
-═══════════════════════════════════════ */
-function renderAll() { renderGrid(); renderList(); renderMobile(); }
-
-function renderGrid() {
-  document.getElementById('gridContainer').innerHTML = days.map(day => {
-    const d = new Date(day.date+'T12:00:00');
-    const isToday = day.date === todayStr();
+function renderGrid(){
+  document.getElementById('gridContainer').innerHTML=days.map(day=>{
+    const d=new Date(day.date+'T12:00:00');const isToday=day.date===todayStr();
     return `<div class="grid-day-col">
       <div class="day-header">
         <div class="day-hdr-name">${NL_DAYS[d.getDay()]}</div>
         <div class="day-hdr-num ${isToday?'today':''}">${d.getDate()}</div>
         <div class="day-hdr-month">${NL_MON[d.getMonth()]}</div>
       </div>
-      ${day.activities.map(a=>`
-        <div class="activity-card" onclick="openModal('${a.id}')">
-          <div class="ac-icon">${a.icoon||'📚'}</div>
-          <div class="ac-vak">${esc(a.vak)}</div>
-          <div class="ac-tijd">${a.tijd}</div>
-        </div>`).join('')||`<div class="empty-col">—</div>`}
+      ${day.activities.map(a=>`<div class="activity-card" id="card-${a.id}" onclick="openModal('${a.id}',this)">
+        <div class="ac-icon">${a.icoon||'📚'}</div>
+        <div class="ac-vak">${esc(a.vak)}</div>
+        <div class="ac-tijd">${a.tijd}</div>
+      </div>`).join('')||`<div class="empty-col">—</div>`}
     </div>`;
   }).join('');
 }
 
-function renderList() {
-  document.getElementById('dayNavTabs').innerHTML = days.map((day,i) => {
-    const d = new Date(day.date+'T12:00:00');
-    const isToday = day.date === todayStr();
-    return `<div class="day-nav-tab ${i===currentDayIdx?'active':''} ${isToday?'today':''}" onclick="setDay(${i})" id="dTab${i}">
-      <div class="dnt-name">${NL_DAYS[d.getDay()]}</div>
-      <div class="dnt-date">${d.getDate()}</div>
-    </div>`;
+function renderList(){
+  document.getElementById('dayNavTabs').innerHTML=days.map((day,i)=>{
+    const d=new Date(day.date+'T12:00:00');const isToday=day.date===todayStr();
+    return `<div class="day-nav-tab ${i===currentDayIdx?'active':''} ${isToday?'today':''}" onclick="setDay(${i})" id="dTab${i}"><div class="dnt-name">${NL_DAYS[d.getDay()]}</div><div class="dnt-date">${d.getDate()}</div></div>`;
   }).join('');
-
-  document.getElementById('listPanels').innerHTML = days.map((day,i) =>
+  document.getElementById('listPanels').innerHTML=days.map((day,i)=>
     `<div class="list-panel ${i===currentDayIdx?'active':''}" id="lPanel${i}">
-      ${day.activities.map(a=>`
-        <div class="list-row" onclick="openModal('${a.id}')">
-          <div class="lr-icon">${a.icoon||'📚'}</div>
-          <div>
-            <div class="lr-vak">${esc(a.vak)}</div>
-            <div class="lr-meta">${fDateLong(day.date)} · ${a.tijd}</div>
-          </div>
-          <div class="lr-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 4l4 4-4 4"/></svg></div>
-        </div>`).join('')}
+      ${day.activities.map(a=>`<div class="list-row" onclick="openModal('${a.id}',null)">
+        <div class="lr-icon">${a.icoon||'📚'}</div>
+        <div><div class="lr-vak">${esc(a.vak)}</div><div class="lr-meta">${fDateLong(day.date)} · ${a.tijd}</div></div>
+        <div class="lr-arrow"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 4l4 4-4 4"/></svg></div>
+      </div>`).join('')}
     </div>`
   ).join('');
   updateNavBtns();
 }
 
-function renderMobile() {
-  document.getElementById('mobileDayTabs').innerHTML = days.map((day,i) => {
-    const d = new Date(day.date+'T12:00:00');
-    return `<div class="mobile-day-tab ${i===currentDayIdx?'active':''}" onclick="setDay(${i})" id="mTab${i}">
-      <div class="mdt-name">${NL_DAYS[d.getDay()]}</div>
-      <div class="mdt-dot">${d.getDate()}</div>
-    </div>`;
+function renderMobile(){
+  document.getElementById('mobileDayTabs').innerHTML=days.map((day,i)=>{
+    const d=new Date(day.date+'T12:00:00');
+    return `<div class="mobile-day-tab ${i===currentDayIdx?'active':''}" onclick="setDay(${i})" id="mTab${i}"><div class="mdt-name">${NL_DAYS[d.getDay()]}</div><div class="mdt-dot">${d.getDate()}</div></div>`;
   }).join('');
-
-  const track = document.getElementById('mobilePanelsTrack');
-  track.innerHTML = days.map((day,i) =>
+  const track=document.getElementById('mobilePanelsTrack');
+  track.innerHTML=days.map((day,i)=>
     `<div class="mobile-panel" id="mPanel${i}">
-      ${day.activities.length
-        ? day.activities.map(a=>`
-          <div class="mobile-row" onclick="openModal('${a.id}')">
-            <div class="mr-icon">${a.icoon||'📚'}</div>
-            <div>
-              <div class="mr-vak">${esc(a.vak)}</div>
-              <div class="mr-tijd">${a.tijd}</div>
-            </div>
-          </div>`).join('')
-        : `<div class="mobile-empty">Geen activiteiten deze dag.</div>`}
+      ${day.activities.length?day.activities.map(a=>`<div class="mobile-row" onclick="openModal('${a.id}',null)"><div class="mr-icon">${a.icoon||'📚'}</div><div><div class="mr-vak">${esc(a.vak)}</div><div class="mr-tijd">${a.tijd}</div></div></div>`).join(''):`<div class="mobile-empty">Geen activiteiten deze dag.</div>`}
     </div>`
   ).join('');
-
-  track.style.width = (days.length*100) + '%';
-  track.querySelectorAll('.mobile-panel').forEach(p => p.style.width = (100/days.length)+'%');
-  updateMobile(false);
-  initSwipe();
+  track.style.width=(days.length*100)+'%';
+  track.querySelectorAll('.mobile-panel').forEach(p=>p.style.width=(100/days.length)+'%');
+  updateMobile(false);initSwipe();
 }
 
-function updateMobile(animate) {
-  if (!days.length) return;
-  const day = days[currentDayIdx];
-  const d = new Date(day.date+'T12:00:00');
-  document.getElementById('mobileDayTitle').textContent = `${NL_DAYS_F[d.getDay()]} ${d.getDate()} ${NL_MON_F[d.getMonth()]}`;
-  document.querySelectorAll('.mobile-day-tab').forEach((el,i) => el.classList.toggle('active', i===currentDayIdx));
-  const track = document.getElementById('mobilePanelsTrack');
-  track.style.transition = animate ? 'transform .32s cubic-bezier(0.4,0,0.2,1)' : 'none';
-  track.style.transform = `translateX(-${(currentDayIdx/days.length)*100}%)`;
-  document.getElementById(`mTab${currentDayIdx}`)?.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+function updateMobile(animate){
+  if(!days.length)return;
+  const day=days[currentDayIdx];const d=new Date(day.date+'T12:00:00');
+  document.getElementById('mobileDayTitle').textContent=`${NL_DAYS_F[d.getDay()]} ${d.getDate()} ${NL_MON_F[d.getMonth()]}`;
+  document.querySelectorAll('.mobile-day-tab').forEach((el,i)=>el.classList.toggle('active',i===currentDayIdx));
+  const track=document.getElementById('mobilePanelsTrack');
+  track.style.transition=animate?'transform .32s cubic-bezier(0.4,0,0.2,1)':'none';
+  track.style.transform=`translateX(-${(currentDayIdx/days.length)*100}%)`;
+  document.getElementById(`mTab${currentDayIdx}`)?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
 }
 
-function initSwipe() {
-  const wrap = document.getElementById('mobilePanelsWrapper');
-  let sx=0, sy=0;
-  wrap.addEventListener('touchstart', e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; }, {passive:true});
-  wrap.addEventListener('touchend', e=>{
-    const dx = e.changedTouches[0].clientX - sx;
-    const dy = e.changedTouches[0].clientY - sy;
-    if (Math.abs(dx)>Math.abs(dy) && Math.abs(dx)>44) {
-      if (dx<0 && currentDayIdx<days.length-1) setDay(currentDayIdx+1);
-      else if (dx>0 && currentDayIdx>0) setDay(currentDayIdx-1);
-    }
-  }, {passive:true});
+function initSwipe(){
+  const wrap=document.getElementById('mobilePanelsWrapper');
+  let sx=0,sy=0;
+  wrap.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+  wrap.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>44){if(dx<0&&currentDayIdx<days.length-1)setDay(currentDayIdx+1);else if(dx>0&&currentDayIdx>0)setDay(currentDayIdx-1);}
+  },{passive:true});
 }
 
-/* ═══════════════════════════════════════
-   NAVIGATION
-═══════════════════════════════════════ */
-function setDay(idx) {
-  if (idx<0||idx>=days.length) return;
-  const prev = currentDayIdx;
-  const goLeft = idx < prev;
+/* ═══════════ NAVIGATION ═══════════ */
+function setDay(idx){
+  if(idx<0||idx>=days.length)return;
+  const prev=currentDayIdx;const goLeft=idx<prev;
+  const oldP=document.getElementById(`lPanel${prev}`);const newP=document.getElementById(`lPanel${idx}`);
+  if(oldP)oldP.classList.remove('active','anim-r','anim-l');
+  if(newP){newP.classList.remove('anim-r','anim-l','active');void newP.offsetWidth;newP.classList.add(goLeft?'anim-l':'anim-r','active');}
+  document.querySelectorAll('.day-nav-tab').forEach((el,i)=>el.classList.toggle('active',i===idx));
+  currentDayIdx=idx;updateNavBtns();updateMobile(true);
+}
+function navigateDay(delta){setDay(currentDayIdx+delta);}
+function updateNavBtns(){
+  const p=document.getElementById('dayNavPrev'),n=document.getElementById('dayNavNext');
+  if(p)p.disabled=currentDayIdx===0;if(n)n.disabled=currentDayIdx===days.length-1;
+}
+function setView(v){
+  currentView=v;
+  document.getElementById('gridView').classList.toggle('active',v==='grid');
+  document.getElementById('listView').classList.toggle('active',v==='list');
+  document.getElementById('btnGrid').classList.toggle('active',v==='grid');
+  document.getElementById('btnList').classList.toggle('active',v==='list');
+}
 
-  const oldP = document.getElementById(`lPanel${prev}`);
-  const newP = document.getElementById(`lPanel${idx}`);
-  if (oldP) oldP.classList.remove('active','anim-r','anim-l');
-  if (newP) {
-    newP.classList.remove('anim-r','anim-l','active');
-    void newP.offsetWidth;
-    newP.classList.add(goLeft ? 'anim-l' : 'anim-r','active');
+/* ═══════════ MODAL CONTENT BUILD ═══════════ */
+function buildModalContent(act){
+  document.getElementById('modalVakName').textContent=act.vak;
+  document.getElementById('modalMeta').innerHTML=`<svg viewBox="0 0 16 16" fill="currentColor" style="width:13px;height:13px;opacity:.5"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 5h2v5H7zm0 6h2v1.5H7z"/></svg>${fDateLong(act.datum)} · ${act.tijd}`;
+  let btns='';
+  if(act.snelkoppelingen?.begrippen)btns+=`<a href="${act.snelkoppelingen.begrippen}" target="_blank" rel="noopener" class="shortcut-btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Begrippen leren</a>`;
+  btns+=`<a href="https://murmellius.magister.net/magister/#/vandaag" target="_blank" rel="noopener" class="shortcut-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Magister</a>`;
+  if(act.snelkoppelingen?.bestanden)btns+=`<a href="${act.snelkoppelingen.bestanden}" target="_blank" rel="noopener" class="shortcut-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>Bestanden</a>`;
+  document.getElementById('modalShortcuts').innerHTML=btns;
+  const s=act.stof;
+  const rnd=txt=>{if(!txt||!txt.trim())return'<span class="stof-empty">–</span>';return txt.replace(/<i>([\s\S]*?)<\/i>/g,'<i>$1</i>').replace(/\n/g,'<br>');};
+  document.getElementById('modalStof').innerHTML=`<div class="stof-block"><div class="stof-label">Theorie</div><div class="stof-text">${rnd(s.theorie)}</div></div><div class="stof-divider"></div><div class="stof-block"><div class="stof-label">Begrippen</div><div class="stof-text">${rnd(s.begrippen)}</div></div><div class="stof-divider"></div><div class="stof-block"><div class="stof-label">Overig</div><div class="stof-text">${rnd(s.overig)}</div></div>`;
+}
+
+/* ═══════════ MODAL OPEN / CLOSE ═══════════ */
+function openModal(actId, cardEl){
+  if(modalOpen)return;
+  const act=currentRooster.activiteiten.find(a=>a.id===actId);
+  if(!act)return;
+  buildModalContent(act);
+  modalOpen=true;
+  document.body.style.overflow='hidden';
+
+  if(isMob()){
+    /* ── MOBILE: slide in from right ── */
+    const ov=document.getElementById('modalOverlay');
+    const panel=document.getElementById('modalPanel');
+    ov.classList.add('open');
+    // panel starts translateX(100%) from CSS, transitioning to 0
+  } else {
+    /* ── DESKTOP: FLIP card → modal ── */
+    desktopOpenModal(act, actId, cardEl);
   }
-  document.querySelectorAll('.day-nav-tab').forEach((el,i) => el.classList.toggle('active', i===idx));
-
-  currentDayIdx = idx;
-  updateNavBtns();
-  updateMobile(true);
-}
-function navigateDay(delta) { setDay(currentDayIdx+delta); }
-function updateNavBtns() {
-  const p=document.getElementById('dayNavPrev'), n=document.getElementById('dayNavNext');
-  if(p) p.disabled = currentDayIdx===0;
-  if(n) n.disabled = currentDayIdx===days.length-1;
 }
 
-function setView(v) {
-  currentView = v;
-  document.getElementById('gridView').classList.toggle('active', v==='grid');
-  document.getElementById('listView').classList.toggle('active', v==='list');
-  document.getElementById('btnGrid').classList.toggle('active', v==='grid');
-  document.getElementById('btnList').classList.toggle('active', v==='list');
-}
+function desktopOpenModal(act, actId, cardEl){
+  const overlay=document.getElementById('modalOverlay');
+  const panel=document.getElementById('modalPanel');
+  const grid=document.getElementById('gridContainer');
 
-/* ═══════════════════════════════════════
-   MODAL
-═══════════════════════════════════════ */
-function openModal(actId) {
-  const act = currentRooster.activiteiten.find(a=>a.id===actId);
-  if (!act) return;
-
-  document.getElementById('modalVakName').textContent = act.vak;
-  document.getElementById('modalMeta').innerHTML = `
-    <svg viewBox="0 0 16 16" fill="currentColor" style="width:13px;height:13px;opacity:.5">
-      <path d="M8 1a7 7 0 100 14A7 7 0 008 1zM7 5h2v5H7zm0 6h2v1.5H7z"/>
-    </svg>
-    ${fDateLong(act.datum)} · ${act.tijd}`;
-
-  let btns = '';
-  if (act.snelkoppelingen?.begrippen) {
-    btns += `<a href="${act.snelkoppelingen.begrippen}" target="_blank" rel="noopener" class="shortcut-btn primary">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-      </svg>
-      Begrippen leren
-    </a>`;
+  // Hide the source card
+  if(cardEl){
+    cardEl.classList.add('modal-source','animating');
   }
-  btns += `<a href="https://murmellius.magister.net/magister/#/vandaag" target="_blank" rel="noopener" class="shortcut-btn">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
-    </svg>
-    Magister
-  </a>`;
-  if (act.snelkoppelingen?.bestanden) {
-    btns += `<a href="${act.snelkoppelingen.bestanden}" target="_blank" rel="noopener" class="shortcut-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
-      </svg>
-      Bestanden
-    </a>`;
+
+  // Dim the grid
+  grid.classList.add('modal-open');
+
+  // Get card rect BEFORE any CSS changes
+  const cardRect=cardEl?cardEl.getBoundingClientRect():null;
+
+  // Show overlay (backdrop fades in)
+  overlay.classList.add('open');
+  panel.style.opacity='0';
+  panel.style.transform='none';
+
+  if(!cardRect){
+    // No card ref (from list view), just fade in
+    panel.style.transition='opacity .3s var(--ease2),transform .35s var(--ease2)';
+    panel.style.transform='scale(0.94) translateY(12px)';
+    void panel.offsetWidth;
+    requestAnimationFrame(()=>{
+      panel.style.opacity='1';
+      panel.style.transform='scale(1) translateY(0)';
+    });
+    return;
   }
-  document.getElementById('modalShortcuts').innerHTML = btns;
 
-  const s = act.stof;
-  const rnd = txt => {
-    if (!txt||!txt.trim()) return '<span class="stof-empty">–</span>';
-    return txt.replace(/<i>([\s\S]*?)<\/i>/g,'<i>$1</i>').replace(/\n/g,'<br>');
-  };
-  document.getElementById('modalStof').innerHTML = `
-    <div class="stof-block"><div class="stof-label">Theorie</div><div class="stof-text">${rnd(s.theorie)}</div></div>
-    <div class="stof-divider"></div>
-    <div class="stof-block"><div class="stof-label">Begrippen</div><div class="stof-text">${rnd(s.begrippen)}</div></div>
-    <div class="stof-divider"></div>
-    <div class="stof-block"><div class="stof-label">Overig</div><div class="stof-text">${rnd(s.overig)}</div></div>`;
+  // Create ghost clone positioned exactly over the card
+  if(ghostEl){ghostEl.remove();ghostEl=null;}
+  const ghost=document.createElement('div');
+  ghost.className='modal-ghost';
+  ghost.innerHTML=`<div class="ghost-card-content">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:0.5;border-radius:0;"></div>
+    <div style="font-size:24px;line-height:1;padding-left:2px;">${act.icoon||'📚'}</div>
+    <div style="font-size:15px;font-weight:800;color:var(--text);letter-spacing:-0.2px;margin-top:2px;">${esc(act.vak)}</div>
+    <div style="font-size:11px;color:var(--text3);font-weight:600;">${act.tijd}</div>
+  </div>`;
+  document.body.appendChild(ghost);
+  ghostEl=ghost;
 
-  document.getElementById('modalOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  // Position ghost at card rect
+  ghost.style.cssText+=`;
+    left:${cardRect.left}px;top:${cardRect.top}px;
+    width:${cardRect.width}px;height:${cardRect.height}px;
+    transition:none;
+  `;
+
+  // Measure final modal rect
+  panel.style.opacity='0';
+  panel.style.visibility='hidden';
+  panel.style.pointerEvents='none';
+  void panel.offsetWidth;
+  const modalRect=panel.getBoundingClientRect();
+  panel.style.visibility='';
+
+  // Duration
+  const DUR=480; // ms
+  const EASE='cubic-bezier(0.34,1.2,0.64,1)';
+
+  // Animate ghost from card → modal rect
+  ghost.style.transition=`left ${DUR}ms ${EASE}, top ${DUR}ms ${EASE}, width ${DUR}ms ${EASE}, height ${DUR}ms ${EASE}, border-radius ${DUR}ms ${EASE}, box-shadow ${DUR}ms ${EASE}`;
+  void ghost.offsetWidth;
+
+  requestAnimationFrame(()=>{
+    ghost.style.left=`${modalRect.left}px`;
+    ghost.style.top=`${modalRect.top}px`;
+    ghost.style.width=`${modalRect.width}px`;
+    ghost.style.height=`${modalRect.height}px`;
+    ghost.style.borderRadius='var(--r2)';
+    ghost.style.boxShadow='0 24px 64px rgba(80,60,160,0.22)';
+
+    // Fade out card content, fade in modal-style void
+    const cardContent=ghost.querySelector('.ghost-card-content');
+    cardContent.style.opacity='0';
+    cardContent.style.transition=`opacity ${DUR*0.35}ms ease`;
+  });
+
+  // After animation finishes: show real panel, remove ghost
+  setTimeout(()=>{
+    panel.style.transition='opacity .18s ease';
+    panel.style.opacity='1';
+    panel.style.pointerEvents='all';
+    if(ghost.parentNode)ghost.remove();
+    ghostEl=null;
+  }, DUR - 40);
 }
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
 
-/* ═══════════════════════════════════════
-   TOAST
-═══════════════════════════════════════ */
+function closeModal(){
+  if(!modalOpen)return;
+  const overlay=document.getElementById('modalOverlay');
+  const panel=document.getElementById('modalPanel');
+  const grid=document.getElementById('gridContainer');
+
+  if(isMob()){
+    // slide back right
+    panel.style.transform='translateX(100%)';
+    setTimeout(()=>{
+      overlay.classList.remove('open');
+      panel.style.transform='';
+      modalOpen=false;document.body.style.overflow='';
+    },370);
+  } else {
+    // Fade out + scale
+    panel.style.transition='opacity .22s ease, transform .22s ease';
+    panel.style.opacity='0';
+    panel.style.transform='scale(0.96) translateY(8px)';
+    overlay.querySelector('.modal-backdrop').style.opacity='0';
+
+    // Un-dim grid
+    grid.classList.remove('modal-open');
+    document.querySelectorAll('.activity-card.modal-source').forEach(c=>{
+      c.classList.remove('modal-source');
+      c.style.transition='opacity .25s ease';
+      c.style.opacity='1';
+      setTimeout(()=>{c.style.transition='';c.style.opacity='';c.classList.remove('animating');},260);
+    });
+
+    setTimeout(()=>{
+      overlay.classList.remove('open');
+      overlay.querySelector('.modal-backdrop').style.opacity='';
+      panel.style.transform='';
+      panel.style.opacity='0';
+      panel.style.transition='';
+      modalOpen=false;document.body.style.overflow='';
+    },240);
+  }
+
+  if(ghostEl){ghostEl.remove();ghostEl=null;}
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* ═══════════ ENTRANCE ANIMATIONS ═══════════ */
+function triggerEntranceAnim(){
+  if(isMob()){
+    // simple fade+slide
+    const mv=document.getElementById('mobileView');
+    mv.style.opacity='0';mv.style.transform='translateY(16px)';
+    requestAnimationFrame(()=>{
+      setTimeout(()=>{mv.classList.add('mob-entered');},80);
+    });
+    // Nav
+    document.getElementById('navInner').classList.add('nav-entered');
+  } else {
+    // Desktop cascade
+    // Nav + banner fade
+    const nav=document.getElementById('navInner');
+    const banner=document.getElementById('expiredBanner');
+    nav.style.opacity='0';banner.style.opacity='0';
+    setTimeout(()=>{nav.classList.add('nav-entered');banner.classList.add('nav-entered');},60);
+
+    // Grid columns
+    const cols=Array.from(document.querySelectorAll('.grid-day-col'));
+    if(!cols.length)return;
+    const n=cols.length;
+    // Build stagger order: column 0 first, then outward pairs
+    // order: 0,1,2,3... but we want top row columns to stagger from left across
+    // Each col stagger: base delay + col_index * step
+    const BASE=120; // ms after page load
+    const COL_STEP=55; // ms between columns
+
+    cols.forEach((col,colIdx)=>{
+      const colDelay=BASE+colIdx*COL_STEP;
+      setTimeout(()=>{
+        col.classList.add('entered');
+        // Stagger children inside col: header first, then cards
+        const children=Array.from(col.querySelectorAll('.day-header,.activity-card,.empty-col'));
+        children.forEach((child,ci)=>{
+          child.style.transitionDelay=`${ci*60}ms`;
+        });
+      },colDelay);
+    });
+  }
+}
+
+/* ═══════════ TOAST ═══════════ */
 let _tt;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(_tt); _tt = setTimeout(()=>t.classList.remove('show'), 2600);
-}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(()=>t.classList.remove('show'),2600);}
 
-/* ═══════════════════════════════════════
-   UTILS
-═══════════════════════════════════════ */
-function todayStr() { return new Date().toISOString().split('T')[0]; }
-function fDate(str) { if(!str) return ''; const d=new Date(str+'T12:00:00'); return `${d.getDate()} ${NL_MON[d.getMonth()]}`; }
-function fDateLong(str) { if(!str) return ''; const d=new Date(str+'T12:00:00'); return `${NL_DAYS_F[d.getDay()]} ${d.getDate()} ${NL_MON_F[d.getMonth()]}`; }
-function esc(s) { if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+/* ═══════════ UTILS ═══════════ */
+function todayStr(){return new Date().toISOString().split('T')[0];}
+function fDate(str){if(!str)return'';const d=new Date(str+'T12:00:00');return`${d.getDate()} ${NL_MON[d.getMonth()]}`;}
+function fDateLong(str){if(!str)return'';const d=new Date(str+'T12:00:00');return`${NL_DAYS_F[d.getDay()]} ${d.getDate()} ${NL_MON_F[d.getMonth()]}`;}
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
-/* ═══════════════════════════════════════
-   BOOT
-═══════════════════════════════════════ */
+/* ═══════════ BOOT ═══════════ */
 initApp();
 </script>
 </body>
-</html>
+</html>©

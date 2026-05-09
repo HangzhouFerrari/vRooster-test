@@ -1,0 +1,212 @@
+{
+  "naam": "CTP 3",
+  "klas": "Klas 3",
+  "startdatum": "2025-06-12",
+  "einddatum": "2025-06-19",
+  "activiteiten": [
+    {
+      "id": "scheikunde",
+      "weergavenaam": "Scheikunde",
+      "vak": "Scheikunde",
+      "datum": "2025-02-13",
+      "tijd": "11:20-12:10",
+      "icoon": "⚗️",
+      "snelkoppelingen": {
+        "begrippen": "https://quizlet.com/user/HeyTap/folders/ctp2-2526?i=5mmwjl&x=1xqt",
+        "bestanden": "https://drive.google.com/drive/folders/1xifZpcXIuxnKVonqNxPSVy7SeA1ktw_2?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Hoofdstuk 2 en 3 (excl. §3.4) en kennis hoofdstuk 1.",
+        "begrippen": "Hoofdstuk 2 en 3 (excl. §3.4) en evt. hoofdstuk 1.",
+        "overig": "Reactievergelijkingen kloppend maken."
+      }
+    },
+    {
+      "id": "frans",
+      "weergavenaam": "Frans",
+      "vak": "Frans",
+      "datum": "2025-02-13",
+      "tijd": "12:40-13:30",
+      "icoon": "🇫🇷",
+      "snelkoppelingen": {
+        "begrippen": null,
+        "bestanden": "https://drive.google.com/drive/folders/1-wJZ_h_q9RV143Wyxvhl-gcInwqY53K3?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Hoofdstuk 2 (deel A, B, C, D, E, F, G, H) en hoofdstuk 3 (deel A, B, C, D).",
+        "begrippen": "Hoofdstuk 2 deel A, B, E, F en hoofdstuk 3 deel A, B.",
+        "overig": "Phrases-clés en onrglm. ww'en."
+      }
+    },
+    {
+      "id": "latijn",
+      "weergavenaam": "Latijn",
+      "vak": "Latijn",
+      "datum": "2025-02-17",
+      "tijd": "11:20-12:10",
+      "icoon": "🏛️",
+      "snelkoppelingen": {
+        "begrippen": null,
+        "bestanden": "https://drive.google.com/drive/folders/1baB-trtODlMS1krdKDX-0Hj2qSnZIbfF?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Cultuur en grammatica hoofdstuk 15 en 16, teksten 15A, 15B en 16B.",
+        "begrippen": "",
+        "overig": ""
+      }
+    },
+    {
+      "id": "duits",
+      "weergavenaam": "Duits",
+      "vak": "Duits",
+      "datum": "2025-02-17",
+      "tijd": "12:40-13:30",
+      "icoon": "🇩🇪",
+      "snelkoppelingen": {
+        "begrippen": "https://quizlet.com/user/HeyTap/folders/ctp2-2526?i=5mmwjl&x=1xqt",
+        "bestanden": "https://drive.google.com/drive/folders/1UbmNF2tttqWKA5SFx-zNnhwEPM0RE98z?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Grammatica 1A-1K (excl. onvt.vt. regelmatige ww'en) en 2A-2J, lezen niveau B1.",
+        "begrippen": "Vokabeln S45, S50, S7 en S9.",
+        "overig": "Schrijven van een mail (S7, A7) en luistertoets (onder lestijd)."
+      }
+    },
+    {
+      "id": "grieks",
+      "weergavenaam": "Grieks",
+      "vak": "Grieks",
+      "datum": "2025-02-18",
+      "tijd": "11:20-12:10",
+      "icoon": "🏺",
+      "snelkoppelingen": {
+        "begrippen": null,
+        "bestanden": "https://drive.google.com/drive/folders/1paKeto_-3y1mDDMxD_5ZOLMPCYskaXbC?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Grammatica thema 6, cultuur en Griekse teksten hoofdstuk 26, 27 en 28.",
+        "begrippen": "",
+        "overig": ""
+      }
+    },
+    {
+      "id": "wiskunde",
+      "weergavenaam": "Wiskunde",
+      "vak": "Wiskunde",
+      "datum": "2025-02-18",
+      "tijd": "12:40-13:30",
+      "icoon": "📐",
+      "snelkoppelingen": {
+        "begrippen": null,
+        "bestanden": "https://drive.google.com/drive/folders/1JxLQk4R6vttBavVn1uc8hpKeva16Ac4c?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Hoofdstuk 5 (en kennis H3).",
+        "begrippen": "",
+        "overig": "ABC-formule en X defineren."
+      }
+    },
+    {
+      "id": "aardrijkskunde",
+      "weergavenaam": "Aardrijkskunde",
+      "vak": "Aardrijkskunde",
+      "datum": "2025-02-19",
+      "tijd": "11:20-12:10",
+      "icoon": "🌍",
+      "snelkoppelingen": {
+        "begrippen": "https://quizlet.com/user/HeyTap/folders/ctp2-2526?i=5mmwjl&x=1xqt",
+        "bestanden": "https://drive.google.com/drive/folders/1UbmNF2tttqWKA5SFx-zNnhwEPM0RE98z?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Hoofdstuk 1 (§1.2 t/m §1.5) en Hoofdstuk 3 (§3.1 t/m §3.5).",
+        "begrippen": "Hoofdstuk 1 (§1.2 t/m §1.5) en Hoofdstuk 3 (§3.1 t/m §3.5).",
+        "overig": ""
+      }
+    },
+    {
+      "id": "economie",
+      "weergavenaam": "Economie",
+      "vak": "Economie",
+      "datum": "2025-02-19",
+      "tijd": "12:40-13:30",
+      "icoon": "📊",
+      "snelkoppelingen": {
+        "begrippen": "https://quizlet.com/user/HeyTap/folders/ctp2-2526?i=5mmwjl&x=1xqt",
+        "bestanden": "https://drive.google.com/drive/folders/10BjxebOg1-P_90GWMWI9JBJyTt0SoIKf?usp=sharing"
+      },
+      "stof": {
+        "theorie": "<i>Proefwerk alleen voor herkansing.</i>\n\nSyllabus economie leerdoel 1 t/m 16, 18, 19 en opdrachtem 1 t/m 8.",
+        "begrippen": "Theorie syllabus.",
+        "overig": "Grafiek tekenen."
+      }
+    },
+    {
+      "id": "nederlands",
+      "weergavenaam": "Nederlands",
+      "vak": "Nederlands",
+      "datum": "2025-02-20",
+      "tijd": "11:20-12:10",
+      "icoon": "📝",
+      "snelkoppelingen": {
+        "begrippen": null,
+        "bestanden": "https://drive.google.com/drive/folders/15dHuR2Rnv5O-DC753tPuphvROs0MQaQZ?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Syllabus zinsontleden.",
+        "begrippen": "",
+        "overig": "Trappetjesschema kunnen maken en bijzinnen kunnen benoemen."
+      }
+    },
+    {
+      "id": "natuurkunde",
+      "weergavenaam": "Natuurkunde",
+      "vak": "Natuurkunde",
+      "datum": "2025-02-20",
+      "tijd": "12:40-13:30",
+      "icoon": "⚡",
+      "snelkoppelingen": {
+        "begrippen": "https://quizlet.com/user/HeyTap/folders/ctp2-2526?i=5mmwjl&x=1xqt",
+        "bestanden": "https://drive.google.com/drive/folders/1QP76MRRitgC93EeKIkt-t6_TiZYm4rct?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Hoofdstuk 2 (§2.1 t/m 2.5) excl. 'Een platte lens...' (103), 'Convergeren met een spiegel' (105), 'Schotelantenne', 'Telescoop' (106), 'Holle lens en...' (113), 'In- en uitzoomen' (128), Tekst 131-132 en Hoofdstuk 3 (§3.2 t/m §3.5).",
+        "begrippen": "Hoofdstuk 2 §2 t/m §5 en hoofdstuk 3 §3.2 t/m §3.5.",
+        "overig": "Vervalvergelijking opschrijven."
+      }
+    },
+    {
+      "id": "geschiedenis",
+      "weergavenaam": "Geschiedenis",
+      "vak": "Geschiedenis",
+      "datum": "2025-02-21",
+      "tijd": "11:20-12:10",
+      "icoon": "📜",
+      "snelkoppelingen": {
+        "begrippen": "https://quizlet.com/user/HeyTap/folders/ctp2-2526?i=5mmwjl&x=1xqt",
+        "bestanden": "https://drive.google.com/drive/folders/1t8EAqn1Rl3Bfbl7nsSO-A2JWp3LuMhgz?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Hoofdstuk 3: De tweede wereldoorlog (§3.1 t/m §3.3).",
+        "begrippen": "§3.1 t/m §3.3.",
+        "overig": "Vaardigheden bron herkennen."
+      }
+    },
+    {
+      "id": "engels",
+      "weergavenaam": "Engels",
+      "vak": "Engels",
+      "datum": "2025-02-21",
+      "tijd": "12:40-13:30",
+      "icoon": "🇬🇧",
+      "snelkoppelingen": {
+        "begrippen": null,
+        "bestanden": "https://drive.google.com/drive/folders/101mYx_4WwLLp5r0htZbWBG0E_zvIDpu4?usp=sharing"
+      },
+      "stof": {
+        "theorie": "Unit 3 (A, B, D, E), unit 5 (A, B, E) en unit 6 (A t/m E).",
+        "begrippen": "",
+        "overig": "Zinnen van het actief naar het passief omzetten."
+      }
+    }
+  ]
+}
